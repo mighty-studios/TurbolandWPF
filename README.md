@@ -94,14 +94,52 @@ dotnet run --project src/TurbolandTheme.Gallery -- accessible 2
 dotnet run --project src/SampleApp -- authentic 1
 ```
 
-## Credits
+## Licensing
 
-The bundled font is **Px437 IBM VGA 9x16** from
-[The Ultimate Oldschool PC Font Pack](https://int10h.org/oldschool-pc-fonts/) by VileR,
+### Source code
+
+Copyright 2026 Mighty Studios, LLC.  
+All rights reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+
+### TL;DR
+
+You are free to:
+- Use this project commercially
+- Use it in closed-source or open-source software
+- Modify it
+- Redistribute it
+- Include it in your own products
+
+You must:
+- Include the Apache 2.0 license and copyright notices
+- State significant changes if you redistribute a modified version
+
+The license also includes an express patent grant from contributors.
+
+This summary is provided for convenience only. See the full
+See [LICENSE.md](LICENSE.md)
+
+### Third-party font notice
+
+This repository bundles the font **Px437 IBM VGA 9x16** by VileR.  
+From [The Ultimate Oldschool PC Font Pack](https://int10h.org/oldschool-pc-fonts/),
 used under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/).
 
-This project is an independent tribute to the look of 1990s DOS text-mode IDEs. It is
-not affiliated with or endorsed by any IDE vendor.
+The font is licensed separately under **CC BY-SA 4.0** and is not
+covered by the Apache 2.0 license applied to this project's source code.
+
+__Projects made using this Theme and the bundled Px437 IBM VGA 9x16 font should also credit VileR according to the CC BY-SA 4.0 terms__
+
+## Artistic Dislaimer
+This project is an independent, artistic tribute to the look of 1990s DOS text-mode IDEs. It is
+not affiliated with nor endorsed by any IDE vendor who made similar looking commercial projects.
 
 ---  
   
