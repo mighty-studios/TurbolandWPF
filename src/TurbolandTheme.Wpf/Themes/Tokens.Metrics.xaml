@@ -1,0 +1,178 @@
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:sys="clr-namespace:System;assembly=System.Runtime">
+
+    <!-- ============================================================
+         TURBOLAND THEME - METRIC TOKENS (1x values, 96 DPI)
+
+         Base character cell: 9 x 16. Every value here is a multiple of
+         the cell, and TurbolandTheme.Apply multiplies each by the integer
+         scale factor at runtime. Integer factors only, so the grid
+         never lands on a fractional pixel.
+
+         THE CELL IS NOT SQUARE (9 wide, 16 tall). A single token can
+         therefore not serve as both a width and a height, which is why
+         several measures below come in horizontal/vertical pairs.
+         Horizontal measures are multiples of 9, vertical measures are
+         multiples of 16. Line widths (border, focus, separator) are
+         pixel measures rather than cell measures and scale on their own.
+         ============================================================ -->
+
+    <!-- 9 px is the VGA text-mode character clock and the bundled font's native
+         advance width; 16 px is its scan-line height. -->
+    <sys:Double x:Key="Turboland.Metric.CellWidth">9</sys:Double>
+    <sys:Double x:Key="Turboland.Metric.CellHeight">16</sys:Double>
+
+    <!-- Line / border widths (cell-pixel units) -->
+    <sys:Double x:Key="Turboland.Metric.BorderThickness">1</sys:Double>
+    <sys:Double x:Key="Turboland.Metric.DialogBorderThickness">2</sys:Double>
+    <sys:Double x:Key="Turboland.Metric.ButtonShadow">2</sys:Double>
+    <sys:Double x:Key="Turboland.Metric.FocusBorder">1</sys:Double>
+    <sys:Double x:Key="Turboland.Metric.CornerRadius">0</sys:Double>
+
+    <!-- Spacing. One cell horizontally = 9. -->
+    <sys:Double x:Key="Turboland.Metric.DialogPadding">9</sys:Double>
+    <sys:Double x:Key="Turboland.Metric.WindowPadding">9</sys:Double>
+    <!-- Hard shadow: two cells right, one row down. These are different distances
+         that happen to look alike; do not collapse them into one token. -->
+    <sys:Double x:Key="Turboland.Metric.ShadowOffsetX">18</sys:Double>
+    <sys:Double x:Key="Turboland.Metric.ShadowOffsetY">16</sys:Double>
+
+    <!-- Fixed element heights (one cell row each) -->
+    <sys:Double x:Key="Turboland.Metric.MenuHeight">16</sys:Double>
+    <sys:Double x:Key="Turboland.Metric.StatusBarHeight">16</sys:Double>
+    <sys:Double x:Key="Turboland.Metric.TitleBarHeight">16</sys:Double>
+    <!-- How much of a dragged dialog must remain on the host: four cells, enough
+         to keep a grabbable strip of title bar reachable. -->
+    <sys:Double x:Key="Turboland.Metric.DialogMinVisible">36</sys:Double>
+
+    <!-- Component sizes, all whole cells.
+         ScrollBar needs a width AND a height because the cell is not square: a
+         vertical bar is one cell wide, a horizontal bar is one row tall. -->
+    <sys:Double x:Key="Turboland.Metric.ScrollBarWidth">9</sys:Double>
+    <sys:Double x:Key="Turboland.Metric.ScrollBarHeight">16</sys:Double>
+    <!-- Eight cells by one row. -->
+    <sys:Double x:Key="Turboland.Metric.ButtonMinWidth">72</sys:Double>
+    <sys:Double x:Key="Turboland.Metric.ComboButtonWidth">18</sys:Double>
+    <sys:Double x:Key="Turboland.Metric.PopupMaxHeight">240</sys:Double>
+    <sys:Double x:Key="Turboland.Metric.SeparatorThickness">1</sys:Double>
+
+    <!-- Fixed grid tracks. GridLength, not Double: RowDefinition.Height and
+         ColumnDefinition.Width will not accept a Double resource. The
+         Turboland.Grid.* prefix is what makes TurbolandTheme.Apply scale them.
+         The scroll-bar arrow button is one cell along the bar's own axis, so it
+         too needs both orientations. -->
+    <GridLength x:Key="Turboland.Grid.ScrollBarButtonHeight">16</GridLength>
+    <GridLength x:Key="Turboland.Grid.ScrollBarButtonWidth">9</GridLength>
+    <GridLength x:Key="Turboland.Grid.MenuIconColumn">18</GridLength>
+    <GridLength x:Key="Turboland.Grid.TreeIndent">18</GridLength>
+
+    <!-- Convenience Thickness values (scales with the metric factor) -->
+    <Thickness x:Key="Turboland.Size.Border">1</Thickness>
+    <!-- Grab band for WindowChrome's resize edges. Not a cell measure: this is a
+         pointer-affordance dimension, sized so it stays comfortable to hit without
+         eating so much of the one-cell title row that dragging becomes fiddly. -->
+    <Thickness x:Key="Turboland.Size.ResizeBorder">6</Thickness>
+    <Thickness x:Key="Turboland.Size.DialogBorder">2</Thickness>
+    <Thickness x:Key="Turboland.Size.FocusBorder">1</Thickness>
+    <!-- Focus rings are drawn just OUTSIDE the control they belong to. A ring drawn
+         inside would either eat a pixel row of a one-row control's glyphs or, worse,
+         if it were part of the layout, resize the control the moment it took focus. -->
+    <Thickness x:Key="Turboland.Size.FocusRingOffset">-1</Thickness>
+    <!-- Room a CLIPPING container must reserve so it does not cut off chrome that
+         Turboland controls deliberately paint outside their own layout box.
+         Left/top covers the focus-ring overhang (FocusRingOffset). Right/bottom
+         covers the larger of that and a button's hard shadow, which lands a whole
+         cell right and 7 px down (ButtonShadowOffset).
+
+         Without this, a control sitting flush against the edge of a ScrollViewer
+         loses the whole of its overhanging ring: the ring is painted at x=-1, which
+         is outside the viewport, so it is clipped away and the control renders with
+         an open-sided highlight.
+
+         Apply it to the CONTENT of a ScrollViewer, never as the ScrollViewer's
+         Padding: the stock template applies Padding to the ScrollContentPresenter
+         itself, which moves the clip along with the content and leaves it just as
+         flush. Any panel with ClipToBounds="True" needs the same treatment. -->
+    <Thickness x:Key="Turboland.Size.ChromeInset">1,1,9,7</Thickness>
+    <!-- One cell across, nothing vertical. A field is exactly one row tall, which
+         leaves no room inside it for chrome, so its outline is drawn outside the
+         layout box instead (Controls.TextBox.xaml). Any vertical padding here makes
+         the field taller than a row and pushes it off the character grid. -->
+    <Thickness x:Key="Turboland.Size.FieldPadding">9,0</Thickness>
+    <!-- List and combo rows are character rows: one cell across, nothing vertical.
+         Vertical padding would make a row taller than a cell, and a list box sized
+         in whole rows could then never show a whole number of them. -->
+    <Thickness x:Key="Turboland.Size.ItemPadding">9,0</Thickness>
+    <Thickness x:Key="Turboland.Size.MenuPadding">9,0</Thickness>
+    <!-- Exactly one cell of padding per side. This keeps every button a whole number
+         of cells wide for any label, since the width works out as
+         (characters + 2) x CellWidth. An eight-character label therefore gives the
+         standard 72 px button. -->
+    <Thickness x:Key="Turboland.Size.ButtonPadding">9,0</Thickness>
+    <Thickness x:Key="Turboland.Size.TabPadding">9,0</Thickness>
+    <!-- Horizontal one cell, vertical half a row. A single uniform value cannot
+         express that once the cell stops being square. -->
+    <Thickness x:Key="Turboland.Size.GroupBoxPadding">9,8</Thickness>
+
+    <!-- One cell of horizontal padding, none vertical: keeps a control
+         exactly one cell row tall so it stays on the character grid. -->
+    <Thickness x:Key="Turboland.Size.CellPadding">9,0</Thickness>
+
+    <!-- Offsets that must scale but are not symmetric padding -->
+    <!-- The button's hard shadow, on the same model as the dialog's: the face
+         rectangle translated one cell right and seven pixels down, painted OUTSIDE
+         the layout box so the face itself stays exactly one row tall. The equal and
+         opposite right/bottom values are what keep it out of the measure. -->
+    <Thickness x:Key="Turboland.Size.ButtonShadowOffset">9,7,-9,-7</Thickness>
+    <!-- The dialog's hard shadow: the same rectangle as the dialog, pushed two cells
+         right and one row down. The negative right/bottom values are what let it
+         paint outside the dialog's own bounds instead of shrinking it. Asymmetric
+         because the cell is 9x16, so two cells right is 18 and one row down is 16. -->
+    <Thickness x:Key="Turboland.Size.DialogShadowOffset">18,16,-18,-16</Thickness>
+    <!-- Pressed: the face slides one pixel down-right into its own shadow. Equal and
+         opposite values, so the face keeps its size and the button keeps its layout
+         slot; a pressed button must not reflow the panel around it. -->
+    <Thickness x:Key="Turboland.Size.ButtonPressedOffset">1,1,-1,-1</Thickness>
+    <!-- Spacing for a horizontal button strip. Two cells, because the first is taken
+         by the shadow: it is painted outside the button's layout box, so a one-cell
+         gap would be filled edge to edge and the strip would read as one solid bar.
+         Vertically stacked buttons want one clear row below them for the same
+         reason, giving a two-row pitch. -->
+    <Thickness x:Key="Turboland.Size.ButtonStripMargin">0,0,18,0</Thickness>
+    <!-- One clear row between stacked groups of controls. On a character grid a
+         caption sits directly on the row above its control with no gap at all, so
+         separation between *groups* is what needs a token, and it is a whole row
+         rather than a few pixels. -->
+    <Thickness x:Key="Turboland.Size.SectionMargin">0,0,0,16</Thickness>
+    <!-- Two cells between side-by-side columns of controls, applied to the left
+         column only. Splitting it as half a gutter each would be 4.5 px, which is
+         not expressible on a 9 px grid. -->
+    <Thickness x:Key="Turboland.Size.ColumnGutter">0,0,18,0</Thickness>
+    <!-- Inset for a shadowed dialog surface sitting on the blue desktop.
+         ASYMMETRIC ON PURPOSE: one cell / one row of visible desktop on the top and
+         left, plus room on the right and bottom for the hard shadow, which is
+         painted outside the surface's layout box (DialogShadowOffset) and would
+         otherwise be clipped by the host's edge. 9+18 right, 16+16 bottom. -->
+    <Thickness x:Key="Turboland.Size.DesktopInset">9,16,27,32</Thickness>
+    <!-- Selected tab: no bottom edge, so the tab merges into the page. -->
+    <Thickness x:Key="Turboland.Size.TabSelectedBorder">1,1,1,0</Thickness>
+    <Thickness x:Key="Turboland.Size.SeparatorMargin">0,1</Thickness>
+    <Thickness x:Key="Turboland.Size.TopBorder">0,1,0,0</Thickness>
+    <!-- A divider on one edge only. Adds to width but not height, which is how a
+         combo box gets a rule between its field and its arrow while staying one row. -->
+    <Thickness x:Key="Turboland.Size.LeftBorder">1,0,0,0</Thickness>
+    <Thickness x:Key="Turboland.Size.GroupBoxHeaderOffset">0,8,0,0</Thickness>
+    <!-- Lifts the caption by half a cell so it straddles the top frame line instead
+         of sitting inside the frame and colliding with the content. Pairs with
+         GroupBoxHeaderOffset, which reserves the space above the frame for it. -->
+    <Thickness x:Key="Turboland.Size.GroupBoxHeaderStraddle">0,-8,0,0</Thickness>
+    <Thickness x:Key="Turboland.Size.TabSelectedOffset">0,0,0,-1</Thickness>
+    <Thickness x:Key="Turboland.Size.TabUnselectedOffset">0,0,0,2</Thickness>
+    <Thickness x:Key="Turboland.Size.TreeItemPadding">2,0</Thickness>
+    <Thickness x:Key="Turboland.Size.MenuHeaderMargin">4,0,8,0</Thickness>
+    <Thickness x:Key="Turboland.Size.MenuGestureMargin">12,0,8,0</Thickness>
+    <Thickness x:Key="Turboland.Size.MenuArrowMargin">0,0,4,0</Thickness>
+
+</ResourceDictionary>

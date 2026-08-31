@@ -1,0 +1,61 @@
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:c="clr-namespace:TurbolandTheme.Wpf.Controls">
+
+    <!-- ============================================================
+         GROUP BOX (plain)
+         Single black line frame with the caption cutting across the
+         top edge. The double-line variant lives on the
+         TurbolandGroupBox component.
+         ============================================================ -->
+    <Style TargetType="GroupBox">
+        <Setter Property="c:AcceleratorText.AcceleratorBrush" Value="{DynamicResource Turboland.Brush.FieldAccelerator}"/>
+        <Setter Property="FontFamily" Value="{DynamicResource Turboland.Font.Primary}"/>
+        <Setter Property="FontSize" Value="{DynamicResource Turboland.Font.Size.Primary}"/>
+        <Setter Property="Foreground" Value="{DynamicResource Turboland.Brush.WindowForeground}"/>
+        <!-- Paints the gap the caption punches in the top border line, so it has to
+             match the surface the group box sits on. The dialog face is the default
+             because that is where a group box nearly always is; a group box on the
+             blue desktop sets Background to the desktop brush instead. Only the
+             caption is filled - the body stays transparent. -->
+        <Setter Property="Background" Value="{DynamicResource Turboland.Brush.WindowBackground}"/>
+        <!-- Template-bound rather than hardcoded, for the same reason: a group box on
+             a surface other than the dialog face needs to restate its line color. -->
+        <Setter Property="BorderBrush" Value="{DynamicResource Turboland.Brush.ControlShadow}"/>
+        <Setter Property="TextOptions.TextFormattingMode" Value="Display"/>
+        <Setter Property="TextOptions.TextRenderingMode" Value="Grayscale"/>
+        <Setter Property="UseLayoutRounding" Value="True"/>
+        <Setter Property="SnapsToDevicePixels" Value="True"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="GroupBox">
+                    <Grid Margin="{DynamicResource Turboland.Size.GroupBoxHeaderOffset}">
+                        <Border BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{DynamicResource Turboland.Size.Border}"
+                                SnapsToDevicePixels="True">
+                            <ContentPresenter Margin="{DynamicResource Turboland.Size.GroupBoxPadding}"
+                                              ContentSource="Content"/>                        </Border>
+                        <Border x:Name="header"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Top"
+                                Margin="{DynamicResource Turboland.Size.GroupBoxHeaderStraddle}"
+                                Background="{TemplateBinding Background}"
+                                Padding="{DynamicResource Turboland.Size.CellPadding}">
+                            <ContentPresenter ContentSource="Header" RecognizesAccessKey="True"
+                                  ContentTemplateSelector="{DynamicResource Turboland.Selector.Accelerator}"/>
+                        </Border>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Foreground" Value="{DynamicResource Turboland.Brush.DisabledForeground}"/>
+                            <!-- Never advertise a hot key that cannot be pressed. -->
+                            <Setter Property="c:AcceleratorText.AcceleratorBrush" Value="{DynamicResource Turboland.Brush.DisabledForeground}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+</ResourceDictionary>

@@ -1,0 +1,68 @@
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:c="clr-namespace:TurbolandTheme.Wpf.Controls">
+
+    <!-- ============================================================
+         RADIO BUTTON
+         A radio button is literal text: "( ) Label", "(*) Label" when
+         selected, where '*' is the CP437 bullet U+2022. '(', ' ', ')',
+         ' ' then the label, on a cyan field, black text, yellow
+         accelerator, and the focused row drawn entirely in WHITE - not
+         a highlight bar.
+
+         Text rather than an Ellipse so it scales with FontSize.
+         ============================================================ -->
+    <Style TargetType="RadioButton">
+        <Setter Property="c:AcceleratorText.AcceleratorBrush" Value="{DynamicResource Turboland.Brush.FieldAccelerator}"/>
+        <Setter Property="Background" Value="{DynamicResource Turboland.Brush.FieldBackground}"/>
+        <Setter Property="Foreground" Value="{DynamicResource Turboland.Brush.FieldForeground}"/>
+        <Setter Property="FontFamily" Value="{DynamicResource Turboland.Font.Primary}"/>
+        <Setter Property="FontSize" Value="{DynamicResource Turboland.Font.Size.Primary}"/>
+        <Setter Property="MinHeight" Value="{DynamicResource Turboland.Metric.CellHeight}"/>
+        <Setter Property="HorizontalAlignment" Value="Left"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="TextOptions.TextFormattingMode" Value="Display"/>
+        <Setter Property="TextOptions.TextRenderingMode" Value="Grayscale"/>
+        <Setter Property="UseLayoutRounding" Value="True"/>
+        <Setter Property="SnapsToDevicePixels" Value="True"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="RadioButton">
+                    <Border x:Name="root"
+                            Background="{TemplateBinding Background}"
+                            Padding="{DynamicResource Turboland.Size.CellPadding}"
+                            SnapsToDevicePixels="True">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock x:Name="glyph"
+                                       Text="( ) "
+                                       VerticalAlignment="Center"/>
+                            <ContentPresenter x:Name="label"
+                                              VerticalAlignment="Center"
+                                              RecognizesAccessKey="True"
+                                              ContentTemplateSelector="{DynamicResource Turboland.Selector.Accelerator}"/>
+                        </StackPanel>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <!-- U+2022 BULLET: present in the bundled font (12 ink px). -->
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter TargetName="glyph" Property="Text" Value="(&#x2022;) "/>
+                        </Trigger>
+                        <Trigger Property="IsKeyboardFocused" Value="True">
+                            <Setter Property="Foreground" Value="{DynamicResource Turboland.Brush.FieldFocusedForeground}"/>
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Foreground" Value="{DynamicResource Turboland.Brush.FieldFocusedForeground}"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Foreground" Value="{DynamicResource Turboland.Brush.DisabledForeground}"/>
+                            <!-- Never advertise a hot key that cannot be pressed. -->
+                            <Setter Property="c:AcceleratorText.AcceleratorBrush" Value="{DynamicResource Turboland.Brush.DisabledForeground}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+</ResourceDictionary>

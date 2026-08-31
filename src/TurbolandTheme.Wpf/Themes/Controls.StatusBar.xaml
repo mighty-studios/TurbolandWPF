@@ -1,0 +1,126 @@
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:ctl="clr-namespace:TurbolandTheme.Wpf.Controls">
+
+    <!-- ============================================================
+         STATUS BAR
+         Single row, one cell tall, black text on a light gray face
+         with a 1px black top rule.
+
+         The segment layout, one cell per column:
+
+             c0  blank        <- StatusBarItem left padding
+             c1  'F'  Red     <- StatusBarHint.Key
+             c2  '1'  Red
+             c3  blank        <- the space inside the hint template
+             c4  'H'  Black   <- StatusBarHint.Label
+             ..  'elp'
+             c8  blank        <- StatusBarItem right padding
+             c9  '|'  Black   <- Separator (CP437 0xB3, a 2px stroke)
+             c10 blank        <- the next item's left padding
+             c11 'Selects...'
+
+         So the separator carries no padding of its own: the cells
+         either side of it belong to the items. Its ink is Black, the
+         same as the labels. Colors are defined in Tokens.Colors.xaml.
+         ============================================================ -->
+    <Style TargetType="StatusBar">
+        <Setter Property="Background" Value="{DynamicResource Turboland.Brush.StatusBarBackground}"/>
+        <Setter Property="Foreground" Value="{DynamicResource Turboland.Brush.StatusBarForeground}"/>
+        <Setter Property="FontFamily" Value="{DynamicResource Turboland.Font.Primary}"/>
+        <Setter Property="FontSize" Value="{DynamicResource Turboland.Font.Size.StatusBar}"/>
+        <Setter Property="MinHeight" Value="{DynamicResource Turboland.Metric.StatusBarHeight}"/>
+        <Setter Property="TextOptions.TextFormattingMode" Value="Display"/>
+        <Setter Property="TextOptions.TextRenderingMode" Value="Grayscale"/>
+        <Setter Property="UseLayoutRounding" Value="True"/>
+        <Setter Property="SnapsToDevicePixels" Value="True"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="StatusBar">
+                    <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{DynamicResource Turboland.Brush.ControlShadow}"
+                            BorderThickness="{DynamicResource Turboland.Size.TopBorder}"
+                            SnapsToDevicePixels="True">
+                        <ItemsPresenter SnapsToDevicePixels="True"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="StatusBarItem">
+        <Setter Property="FontFamily" Value="{DynamicResource Turboland.Font.Primary}"/>
+        <Setter Property="FontSize" Value="{DynamicResource Turboland.Font.Size.StatusBar}"/>
+        <Setter Property="TextOptions.TextFormattingMode" Value="Display"/>
+        <Setter Property="TextOptions.TextRenderingMode" Value="Grayscale"/>
+        <Setter Property="SnapsToDevicePixels" Value="True"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="StatusBarItem">
+                    <Border Background="Transparent" Padding="{DynamicResource Turboland.Size.CellPadding}">
+                        <ContentPresenter VerticalAlignment="Center"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <!-- One segment: a red key name, one blank cell, then the black label.
+         The space is a real space glyph in the cell font, so it advances
+         exactly one cell and scales with the font instead of needing a
+         margin token. Three Runs in one TextBlock rather than a StackPanel
+         of three TextBlocks: a single text line cannot accumulate rounding
+         between its parts, which is what keeps the hint on the cell grid. -->
+    <Style x:Key="Turboland.Style.StatusBarHint" TargetType="ctl:StatusBarHint">
+        <Setter Property="Foreground" Value="{DynamicResource Turboland.Brush.StatusBarForeground}"/>
+        <Setter Property="FontFamily" Value="{DynamicResource Turboland.Font.Primary}"/>
+        <Setter Property="FontSize" Value="{DynamicResource Turboland.Font.Size.StatusBar}"/>
+        <Setter Property="TextOptions.TextFormattingMode" Value="Display"/>
+        <Setter Property="TextOptions.TextRenderingMode" Value="Grayscale"/>
+        <Setter Property="UseLayoutRounding" Value="True"/>
+        <Setter Property="SnapsToDevicePixels" Value="True"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ctl:StatusBarHint">
+                    <TextBlock VerticalAlignment="Center"
+                               Foreground="{TemplateBinding Foreground}"
+                               SnapsToDevicePixels="True">
+                        <Run Text="{Binding Key, RelativeSource={RelativeSource TemplatedParent}, Mode=OneWay}"
+                             Foreground="{DynamicResource Turboland.Brush.StatusBarAccelerator}"/><Run Text=" "/><Run
+                             Text="{Binding Label, RelativeSource={RelativeSource TemplatedParent}, Mode=OneWay}"/>
+                    </TextBlock>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- StatusBar already routes a Separator child to this key, so segmenting a
+         status bar stays plain WPF composition - no container control needed.
+         Drawn as the CP437 glyph (0xB3, a numeric reference so the file's
+         encoding cannot corrupt it) rather than a 1px Rectangle: the real
+         stroke is 2px wide and centred in its cell, and a text glyph gets
+         that for free at every scale factor. -->
+    <Style x:Key="{x:Static StatusBar.SeparatorStyleKey}" TargetType="Separator">
+        <Setter Property="Foreground" Value="{DynamicResource Turboland.Brush.StatusBarSeparator}"/>
+        <Setter Property="FontFamily" Value="{DynamicResource Turboland.Font.Primary}"/>
+        <Setter Property="FontSize" Value="{DynamicResource Turboland.Font.Size.StatusBar}"/>
+        <Setter Property="Margin" Value="0"/>
+        <Setter Property="Padding" Value="0"/>
+        <Setter Property="SnapsToDevicePixels" Value="True"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Separator">
+                    <TextBlock Text="&#x2502;"
+                               Foreground="{TemplateBinding Foreground}"
+                               VerticalAlignment="Center"
+                               TextOptions.TextFormattingMode="Display"
+                               TextOptions.TextRenderingMode="Grayscale"
+                               UseLayoutRounding="True"
+                               SnapsToDevicePixels="True"/>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+</ResourceDictionary>

@@ -1,0 +1,36 @@
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:c="clr-namespace:TurbolandTheme.Wpf.Controls">
+
+    <!-- ============================================================
+         ACCELERATOR (HOT KEY) RENDERING
+         The access-key character is drawn in a contrasting color
+         rather than underlined:
+           menu bar / dropdown / status bar : Red (VGA 4)  on gray
+           dialog fields                    : Yellow (VGA 14) on cyan
+           push buttons                     : Yellow (VGA 14) on green
+         The accelerator keeps its color when the row is highlighted,
+         so no state trigger recolors it - only the disabled state
+         dims it.
+
+         WPF's AccessText can only underline, so control templates use
+         Turboland.Selector.Accelerator on their header/content presenters
+         instead. AcceleratorText re-registers the access key that
+         replacing AccessText would otherwise destroy.
+         ============================================================ -->
+
+    <DataTemplate x:Key="Turboland.Template.Accelerator">
+        <c:AcceleratorText
+            Caption="{Binding}"
+            ShowUnderline="{DynamicResource Turboland.Flag.AcceleratorUnderline}"
+            InheritTextColor="{DynamicResource Turboland.Flag.AcceleratorInheritColor}"/>
+    </DataTemplate>
+
+    <!-- Selector, not ContentTemplate: only string content carrying a '_'
+         marker is re-templated, so non-text content still presents normally. -->
+    <c:AcceleratorTemplateSelector
+        x:Key="Turboland.Selector.Accelerator"
+        AcceleratorTemplate="{StaticResource Turboland.Template.Accelerator}"/>
+
+</ResourceDictionary>

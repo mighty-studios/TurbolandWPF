@@ -1,0 +1,40 @@
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- ============================================================
+         TURBOLAND THEME - ACCESSIBLE MODE (aggregator)
+         Same token names as authentic; higher contrast and stronger
+         focus indicators (override dictionary merged after the base
+         colors) and TurbolandTheme.Apply uses a minimum 2x scale for
+         larger controls and fonts.
+         ============================================================ -->
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="Tokens.Colors.xaml"/>
+        <ResourceDictionary Source="Tokens.Metrics.xaml"/>
+        <ResourceDictionary Source="Tokens.Typography.xaml"/>
+        <!-- Last of the token block: last-merged wins, so the overrides must
+             follow every dictionary they are allowed to override (they
+             include a typography flag, not just colors). -->
+        <ResourceDictionary Source="Tokens.Accessible.Overrides.xaml"/>
+
+        <ResourceDictionary Source="Controls.Window.xaml"/>
+        <ResourceDictionary Source="Controls.TurbolandWindow.xaml"/>
+        <ResourceDictionary Source="Controls.TurbolandDialog.xaml"/>
+        <ResourceDictionary Source="Controls.Accelerator.xaml"/>
+        <ResourceDictionary Source="Controls.Button.xaml"/>
+        <ResourceDictionary Source="Controls.CheckBox.xaml"/>
+        <ResourceDictionary Source="Controls.RadioButton.xaml"/>
+        <ResourceDictionary Source="Controls.TextBox.xaml"/>
+        <ResourceDictionary Source="Controls.PasswordBox.xaml"/>
+        <ResourceDictionary Source="Controls.Menu.xaml"/>
+        <ResourceDictionary Source="Controls.ListBox.xaml"/>
+        <ResourceDictionary Source="Controls.ComboBox.xaml"/>
+        <ResourceDictionary Source="Controls.TreeView.xaml"/>
+        <ResourceDictionary Source="Controls.ScrollBar.xaml"/>
+        <ResourceDictionary Source="Controls.StatusBar.xaml"/>
+        <ResourceDictionary Source="Controls.TabControl.xaml"/>
+        <ResourceDictionary Source="Controls.GroupBox.xaml"/>
+    </ResourceDictionary.MergedDictionaries>
+
+</ResourceDictionary>

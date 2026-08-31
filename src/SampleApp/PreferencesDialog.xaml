@@ -1,0 +1,83 @@
+<ctl:TurbolandDialog x:Class="SampleApp.PreferencesDialog"
+                   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                   xmlns:ctl="clr-namespace:TurbolandTheme.Wpf.Controls;assembly=TurbolandTheme.Wpf"
+                   Title="Preferences">
+
+    <!-- A Preferences dialog: two columns of grouped options over a row of buttons.
+         Everything inside the frame is a stock WPF control picking up an implicit
+         style - the dialog contributes the chrome, the drag and shade behavior,
+         and the hard shadow.
+
+         The dialog sizes to this content; nothing here sets a width or a height. -->
+
+    <StackPanel>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Grid.Column="0">
+                <GroupBox Header="Screen Size">
+                    <StackPanel>
+                        <RadioButton Content="_25 lines" GroupName="Screen" IsChecked="True"/>
+                        <RadioButton Content="_43/50 lines" GroupName="Screen"/>
+                    </StackPanel>
+                </GroupBox>
+                <GroupBox Header="Source Tracking">
+                    <StackPanel>
+                        <RadioButton Content="_New window" GroupName="Tracking"/>
+                        <RadioButton Content="_Current window" GroupName="Tracking" IsChecked="True"/>
+                    </StackPanel>
+                </GroupBox>
+                <GroupBox Header="Command Set">
+                    <StackPanel>
+                        <RadioButton Content="C_UA" GroupName="Commands"/>
+                        <RadioButton Content="_Alternate" GroupName="Commands"/>
+                        <RadioButton Content="Nati_ve" GroupName="Commands" IsChecked="True"/>
+                    </StackPanel>
+                </GroupBox>
+            </StackPanel>
+
+            <StackPanel Grid.Column="1">
+                <GroupBox Header="Auto-Save">
+                    <StackPanel>
+                        <CheckBox Content="_Editor files"/>
+                        <CheckBox Content="En_vironment" IsChecked="True"/>
+                        <CheckBox Content="_Desktop" IsChecked="True"/>
+                        <CheckBox Content="_Project" IsChecked="True"/>
+                    </StackPanel>
+                </GroupBox>
+
+                <!-- The list box and its scroll bar demonstrate both controls. Its
+                     height is set in code from the cell metric, so it stays a whole
+                     number of rows at any scale factor. -->
+                <GroupBox Header="Desktop File">
+                    <ListBox x:Name="Files" SelectedIndex="0">
+                        <ListBoxItem Content="TURBO.TP"/>
+                        <ListBoxItem Content="TURBO.DSK"/>
+                        <ListBoxItem Content="HELLO.PAS"/>
+                        <ListBoxItem Content="SQUARE.PAS"/>
+                        <ListBoxItem Content="GRAPH.TPU"/>
+                        <ListBoxItem Content="CRT.TPU"/>
+                    </ListBox>
+                </GroupBox>
+
+                <CheckBox Content="_Save old messages"/>
+            </StackPanel>
+        </Grid>
+
+        <!-- IsDefault and IsCancel are WPF's own: Enter and Escape reach them through
+             the dialog's focus scope without this app handling a single key.
+             ButtonStripMargin is not decoration: a button's shadow is painted outside
+             its layout box, so without the gap each shadow lands on its neighbor. -->
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+            <Button Content="OK" IsDefault="True" Click="OnOk"
+                    Margin="{DynamicResource Turboland.Size.ButtonStripMargin}"/>
+            <Button Content="Cancel" IsCancel="True" Click="OnCancel"
+                    Margin="{DynamicResource Turboland.Size.ButtonStripMargin}"/>
+            <Button Content="Help" Click="OnHelp"/>
+        </StackPanel>
+    </StackPanel>
+</ctl:TurbolandDialog>

@@ -1,0 +1,168 @@
+<Window x:Class="TurbolandTheme.Gallery.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ctl="clr-namespace:TurbolandTheme.Wpf.Controls;assembly=TurbolandTheme.Wpf"
+        Title="Turboland Theme Gallery"
+        ctl:CellSize.Columns="98" ctl:CellSize.Rows="44">
+    <!-- The window is sized in cells, not pixels, so it still fits its content at
+         2x. 98x44 cells is simply what holds the two columns without scrolling at 1x. -->
+    <DockPanel>
+
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="_File">
+                <MenuItem Header="_New" InputGestureText="Ctrl+N"/>
+                <MenuItem Header="_Open..." InputGestureText="F3"/>
+                <MenuItem Header="_Save" InputGestureText="F2"/>
+                <Separator/>
+                <MenuItem Header="E_xit" InputGestureText="Alt+X" Click="OnExit"/>
+            </MenuItem>
+            <MenuItem Header="_Edit">
+                <MenuItem Header="_Undo" InputGestureText="Alt+BkSp"/>
+                <Separator/>
+                <MenuItem Header="Cu_t" InputGestureText="Shift+Del"/>
+                <MenuItem Header="_Copy" InputGestureText="Ctrl+Ins"/>
+                <MenuItem Header="_Paste" InputGestureText="Shift+Ins"/>
+            </MenuItem>
+            <MenuItem Header="_Options">
+                <MenuItem Header="_Authentic mode" IsCheckable="True" IsChecked="True"/>
+                <MenuItem Header="A_ccessible mode" IsCheckable="True"/>
+                <Separator/>
+                <MenuItem Header="_Environment...">
+                    <MenuItem Header="_Preferences..."/>
+                    <MenuItem Header="_Editor..."/>
+                </MenuItem>
+            </MenuItem>
+            <MenuItem Header="_Help">
+                <MenuItem Header="_About Turboland Theme" InputGestureText="F1"/>
+            </MenuItem>
+        </Menu>
+
+        <StatusBar DockPanel.Dock="Bottom">
+            <ctl:StatusBarHint Key="F1" Label="Help"/>
+            <Separator/>
+            <ctl:StatusBarHint Key="F2" Label="Save"/>
+            <Separator/>
+            <ctl:StatusBarHint Key="F3" Label="Open"/>
+            <Separator/>
+            <ctl:StatusBarHint Key="F10" Label="Menu"/>
+            <Separator/>
+            <ctl:StatusBarHint Key="Alt+X" Label="Exit"/>
+        </StatusBar>
+
+        <!-- Blue desktop with a hard-shadowed gray dialog surface on it.
+             The shadow's offset comes from its style, not from here; the
+             inset's asymmetry is what keeps that shadow from being clipped. -->
+        <Grid Margin="{DynamicResource Turboland.Size.DesktopInset}">
+            <Border Style="{DynamicResource Turboland.Style.DialogShadow}"/>
+            <Border Style="{DynamicResource Turboland.Style.DialogSurface}">
+                <ScrollViewer VerticalScrollBarVisibility="Auto"
+                              HorizontalScrollBarVisibility="Disabled">
+                    <!-- ChromeInset, not decoration: a ScrollViewer clips, and the OK
+                         button below sits flush at x=0. Turboland focus rings are painted
+                         outside the control's layout box, so without this reservation
+                         the ring's whole left column falls outside the viewport and is
+                         cut off - the button renders with an open-sided highlight. -->
+                    <Grid Margin="{DynamicResource Turboland.Size.ChromeInset}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel Grid.Column="0" Margin="{DynamicResource Turboland.Size.ColumnGutter}">
+
+                            <!-- Captions carry no margin: on a character grid a label sits directly on
+                                 the row above its control. Separation between GROUPS is a whole
+                                 row (SectionMargin), never a few pixels. -->
+                            <TextBlock Text="Buttons"/>
+                            <StackPanel Orientation="Horizontal" Margin="{DynamicResource Turboland.Size.SectionMargin}">
+                                <Button Content="OK" IsDefault="True" Margin="{DynamicResource Turboland.Size.ButtonStripMargin}"/>
+                                <Button Content="Cancel" IsCancel="True" Margin="{DynamicResource Turboland.Size.ButtonStripMargin}"/>
+                                <Button Content="Disabled" IsEnabled="False"/>
+                            </StackPanel>
+
+                            <TextBlock Text="Toggles"/>
+                            <CheckBox Content="Create backup files" IsChecked="True"/>
+                            <CheckBox Content="Optimize for speed"/>
+                            <CheckBox Content="Unavailable" IsEnabled="False"/>
+                            <RadioButton Content="Real mode" GroupName="Model" IsChecked="True"/>
+                            <RadioButton Content="Protected mode" GroupName="Model"/>
+                            <RadioButton Content="Disabled" GroupName="Model" IsEnabled="False"
+                                         Margin="{DynamicResource Turboland.Size.SectionMargin}"/>
+
+                            <TextBlock Text="Text entry"/>
+                            <TextBox Text="C:\TP\BIN\TURBO.EXE"/>
+                            <TextBox Text="Read only" IsEnabled="False"/>
+                            <PasswordBox Password="turbo" Margin="{DynamicResource Turboland.Size.SectionMargin}"/>
+
+                            <TextBlock Text="Combo box"/>
+                            <ComboBox SelectedIndex="0" Margin="{DynamicResource Turboland.Size.SectionMargin}">
+                                <ComboBoxItem Content="8086 / 8088"/>
+                                <ComboBoxItem Content="80286"/>
+                                <ComboBoxItem Content="80386"/>
+                            </ComboBox>
+
+                            <TextBlock Text="Scroll bar"/>
+                            <!-- One row tall, like the horizontal bar inside any scroller, sized from
+                                 the cell metric rather than a pixel literal so it tracks the scale
+                                 factor. -->
+                            <ScrollBar Orientation="Horizontal" ctl:CellSize.Rows="1"
+                                       Minimum="0" Maximum="100" Value="35" ViewportSize="25"/>
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="1">
+
+                            <TextBlock Text="List box"/>
+                            <!-- Sized in ROWS, not pixels: a pixel height that is not a whole multiple of
+                                 the cell would leave the list unable to show a whole number of rows and
+                                 always slice the last one. CellSize.Rows keeps every row fully visible at
+                                 any scale factor. -->
+                            <ListBox ctl:CellSize.Rows="8" SelectedIndex="1" Margin="{DynamicResource Turboland.Size.SectionMargin}">
+                                <ListBoxItem Content="program"/>
+                                <ListBoxItem Content="unit"/>
+                                <ListBoxItem Content="interface"/>
+                                <ListBoxItem Content="implementation"/>
+                                <ListBoxItem Content="procedure"/>
+                                <ListBoxItem Content="function"/>
+                                <ListBoxItem Content="begin"/>
+                                <ListBoxItem Content="end"/>
+                            </ListBox>
+
+                            <TextBlock Text="Tree view"/>
+                            <TreeView ctl:CellSize.Rows="8" Margin="{DynamicResource Turboland.Size.SectionMargin}">
+                                <TreeViewItem Header="TURBO.PAS" IsExpanded="True">
+                                    <TreeViewItem Header="uses"/>
+                                    <TreeViewItem Header="type" IsExpanded="True">
+                                        <TreeViewItem Header="TRecord"/>
+                                    </TreeViewItem>
+                                    <TreeViewItem Header="var"/>
+                                </TreeViewItem>
+                            </TreeView>
+
+                            <TextBlock Text="Group box"/>
+                            <GroupBox Header="Compiler" Margin="{DynamicResource Turboland.Size.SectionMargin}">
+                                <StackPanel>
+                                    <CheckBox Content="Range checking"/>
+                                    <CheckBox Content="Stack checking" IsChecked="True"/>
+                                </StackPanel>
+                            </GroupBox>
+
+                            <TextBlock Text="Tab control"/>
+                            <!-- No fixed height: the tab strip is off-grid, so any whole-control row
+                                 count would be a fiction. It sizes to content; the page's inset is the
+                                 template's Padding. -->
+                            <TabControl>
+                                <TabItem Header="Code">
+                                    <TextBlock Text="Generate 80286 instructions"/>
+                                </TabItem>
+                                <TabItem Header="Debug">
+                                    <TextBlock Text="Include debug information"/>
+                                </TabItem>
+                                <TabItem Header="Links"/>
+                            </TabControl>
+                        </StackPanel>
+                    </Grid>
+                </ScrollViewer>
+            </Border>
+        </Grid>
+    </DockPanel>
+</Window>

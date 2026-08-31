@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net9.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>TurbolandTheme.Wpf</RootNamespace>
+    <PackageId>TurbolandTheme.Wpf</PackageId>
+    <Version>0.1.0</Version>
+    <Description>WPF resource dictionaries, control templates and reusable components for the Turboland IDE theme.</Description>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\TurbolandTheme.Core\TurbolandTheme.Core.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Fonts\Px437_IBM_VGA_9x16.ttf" />
+  </ItemGroup>
+</Project>

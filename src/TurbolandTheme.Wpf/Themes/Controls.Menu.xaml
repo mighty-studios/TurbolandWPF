@@ -1,0 +1,212 @@
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:c="clr-namespace:TurbolandTheme.Wpf.Controls">
+
+    <!-- ============================================================
+         MENU + MENU ITEM
+         Menu bar: black text on a light gray face (VGA 0 on VGA 7),
+         one cell row, accelerators in red (VGA 4). Dropdown: same
+         gray face, black 1px frame; selection = black on green
+         (VGA 2) for both the bar and the dropdown.
+         Accelerator keys are drawn in red by AcceleratorText via
+         Turboland.Selector.Accelerator - color only, no underline.
+         Colors are defined in Tokens.Colors.xaml.
+         ============================================================ -->
+
+    <!-- Top-level menu bar item (also used for click-only top items) -->
+    <ControlTemplate x:Key="TurbolandTopLevelMenuItemTemplate" TargetType="MenuItem">
+        <Grid Background="Transparent">
+            <Border x:Name="border"
+                    Background="{TemplateBinding Background}"
+                    SnapsToDevicePixels="True">
+                <ContentPresenter x:Name="HeaderHost"
+                                  ContentSource="Header"
+                                  RecognizesAccessKey="True"
+                                  ContentTemplateSelector="{DynamicResource Turboland.Selector.Accelerator}"
+                                  Margin="{DynamicResource Turboland.Size.MenuPadding}"
+                                  VerticalAlignment="Center"/>
+            </Border>
+            <Popup x:Name="PART_Popup"
+                   AllowsTransparency="False"
+                   Focusable="False"
+                   IsOpen="{TemplateBinding IsSubmenuOpen}"
+                   Placement="Bottom"
+                   HorizontalOffset="0"
+                   VerticalOffset="0"
+                   PopupAnimation="None">
+                <Border Background="{DynamicResource Turboland.Brush.MenuBackground}"
+                        BorderBrush="{DynamicResource Turboland.Brush.ControlShadow}"
+                        BorderThickness="{DynamicResource Turboland.Size.Border}"
+                        MinWidth="{Binding ActualWidth, RelativeSource={RelativeSource TemplatedParent}}"
+                        SnapsToDevicePixels="True">
+                    <ScrollViewer CanContentScroll="True"
+                                  VerticalScrollBarVisibility="Auto"
+                                  HorizontalScrollBarVisibility="Disabled">
+                        <StackPanel IsItemsHost="True"
+                                    Background="{DynamicResource Turboland.Brush.MenuBackground}"
+                                    KeyboardNavigation.DirectionalNavigation="Cycle"/>
+                    </ScrollViewer>
+                </Border>
+            </Popup>
+        </Grid>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsHighlighted" Value="True">
+                <Setter TargetName="border" Property="Background" Value="{DynamicResource Turboland.Brush.MenuSelectionBackground}"/>
+                <Setter Property="Foreground" Value="{DynamicResource Turboland.Brush.MenuSelectionForeground}"/>
+            </Trigger>
+            <Trigger Property="IsSubmenuOpen" Value="True">
+                <Setter TargetName="border" Property="Background" Value="{DynamicResource Turboland.Brush.MenuSelectionBackground}"/>
+                <Setter Property="Foreground" Value="{DynamicResource Turboland.Brush.MenuSelectionForeground}"/>
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="Foreground" Value="{DynamicResource Turboland.Brush.DisabledForeground}"/>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    <!-- Submenu item (dropdown content), with check column + arrow + key hint -->
+    <ControlTemplate x:Key="TurbolandSubmenuItemTemplate" TargetType="MenuItem">
+        <Grid Background="Transparent">
+            <Border x:Name="border" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="{DynamicResource Turboland.Grid.MenuIconColumn}"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <!-- U+221A SQUARE ROOT is the CP437 check mark (0xFB).
+                         Text, not a Path, so it scales with FontSize. -->
+                    <TextBlock x:Name="check" Grid.Column="0"
+                               Text="&#x221A;"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               Visibility="Hidden"/>
+                    <ContentPresenter x:Name="HeaderHost" Grid.Column="1"
+                                      ContentSource="Header"
+                                      RecognizesAccessKey="True"
+                                      ContentTemplateSelector="{DynamicResource Turboland.Selector.Accelerator}"
+                                      Margin="{DynamicResource Turboland.Size.MenuHeaderMargin}"
+                                      VerticalAlignment="Center"/>
+                    <!-- U+25BA BLACK RIGHT-POINTING POINTER (CP437 0x10). -->
+                    <TextBlock x:Name="arrow" Grid.Column="2"
+                               Text="&#x25BA;"
+                               Margin="{DynamicResource Turboland.Size.MenuArrowMargin}"
+                               VerticalAlignment="Center"
+                               Visibility="Collapsed"/>
+                    <!-- The gesture comes from MenuItem.InputGestureText, the standard
+                         WPF property, so a MenuItem bound to a RoutedUICommand shows its
+                         gesture with no extra markup. -->
+                    <TextBlock x:Name="keyHint" Grid.Column="3"
+                               Margin="{DynamicResource Turboland.Size.MenuGestureMargin}"
+                               VerticalAlignment="Center"
+                               Text="{TemplateBinding InputGestureText}"/>
+                </Grid>
+            </Border>
+            <Popup x:Name="PART_Popup"
+                   AllowsTransparency="False"
+                   Focusable="False"
+                   IsOpen="{TemplateBinding IsSubmenuOpen}"
+                   Placement="Right"
+                   HorizontalOffset="0"
+                   VerticalOffset="0"
+                   PopupAnimation="None">
+                <Border Background="{DynamicResource Turboland.Brush.MenuBackground}"
+                        BorderBrush="{DynamicResource Turboland.Brush.ControlShadow}"
+                        BorderThickness="{DynamicResource Turboland.Size.Border}"
+                        SnapsToDevicePixels="True">
+                    <ScrollViewer CanContentScroll="True"
+                                  VerticalScrollBarVisibility="Auto"
+                                  HorizontalScrollBarVisibility="Disabled">
+                        <StackPanel IsItemsHost="True"
+                                    Background="{DynamicResource Turboland.Brush.MenuBackground}"
+                                    KeyboardNavigation.DirectionalNavigation="Cycle"/>
+                    </ScrollViewer>
+                </Border>
+            </Popup>
+        </Grid>
+        <ControlTemplate.Triggers>
+            <Trigger Property="Role" Value="SubmenuHeader">
+                <Setter TargetName="arrow" Property="Visibility" Value="Visible"/>
+            </Trigger>
+            <Trigger Property="IsChecked" Value="True">
+                <Setter TargetName="check" Property="Visibility" Value="Visible"/>
+            </Trigger>
+            <Trigger Property="IsHighlighted" Value="True">
+                <Setter TargetName="border" Property="Background" Value="{DynamicResource Turboland.Brush.MenuSelectionBackground}"/>
+                <Setter Property="Foreground" Value="{DynamicResource Turboland.Brush.MenuSelectionForeground}"/>
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="Foreground" Value="{DynamicResource Turboland.Brush.DisabledForeground}"/>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    <!-- Separator row -->
+    <ControlTemplate x:Key="TurbolandSeparatorTemplate" TargetType="Separator">
+        <Border Height="{DynamicResource Turboland.Metric.SeparatorThickness}"
+                Margin="{DynamicResource Turboland.Size.SeparatorMargin}"
+                Background="{DynamicResource Turboland.Brush.ControlShadow}"/>
+    </ControlTemplate>
+
+    <Style TargetType="Menu">
+        <Setter Property="Background" Value="{DynamicResource Turboland.Brush.MenuBackground}"/>
+        <Setter Property="Foreground" Value="{DynamicResource Turboland.Brush.MenuForeground}"/>
+        <Setter Property="FontFamily" Value="{DynamicResource Turboland.Font.Primary}"/>
+        <Setter Property="FontSize" Value="{DynamicResource Turboland.Font.Size.Primary}"/>
+        <Setter Property="MinHeight" Value="{DynamicResource Turboland.Metric.MenuHeight}"/>
+        <Setter Property="TextOptions.TextFormattingMode" Value="Display"/>
+        <Setter Property="TextOptions.TextRenderingMode" Value="Grayscale"/>
+        <Setter Property="UseLayoutRounding" Value="True"/>
+        <Setter Property="SnapsToDevicePixels" Value="True"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Menu">
+                    <Border Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
+                        <StackPanel IsItemsHost="True" Orientation="Horizontal" VerticalAlignment="Center"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="MenuItem">
+        <Setter Property="Background" Value="{DynamicResource Turboland.Brush.MenuBackground}"/>
+        <Setter Property="Foreground" Value="{DynamicResource Turboland.Brush.MenuForeground}"/>
+        <!-- Red hot key, on the gray face and on the green selection bar alike:
+             the accelerator stays red on the highlighted row. -->
+        <Setter Property="c:AcceleratorText.AcceleratorBrush"
+                Value="{DynamicResource Turboland.Brush.MenuAccelerator}"/>
+        <Setter Property="FontFamily" Value="{DynamicResource Turboland.Font.Primary}"/>
+        <Setter Property="FontSize" Value="{DynamicResource Turboland.Font.Size.Primary}"/>
+        <Setter Property="TextOptions.TextFormattingMode" Value="Display"/>
+        <Setter Property="TextOptions.TextRenderingMode" Value="Grayscale"/>
+        <Setter Property="UseLayoutRounding" Value="True"/>
+        <Setter Property="SnapsToDevicePixels" Value="True"/>
+        <Setter Property="Template" Value="{StaticResource TurbolandTopLevelMenuItemTemplate}"/>
+        <Style.Triggers>
+            <Trigger Property="Role" Value="SubmenuHeader">
+                <Setter Property="Template" Value="{StaticResource TurbolandSubmenuItemTemplate}"/>
+                <Setter Property="Background" Value="Transparent"/>
+                <Setter Property="Foreground" Value="{DynamicResource Turboland.Brush.MenuForeground}"/>
+            </Trigger>
+            <Trigger Property="Role" Value="SubmenuItem">
+                <Setter Property="Template" Value="{StaticResource TurbolandSubmenuItemTemplate}"/>
+                <Setter Property="Background" Value="Transparent"/>
+                <Setter Property="Foreground" Value="{DynamicResource Turboland.Brush.MenuForeground}"/>
+            </Trigger>
+            <!-- A disabled item must not advertise a hot key that does nothing. -->
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="c:AcceleratorText.AcceleratorBrush"
+                        Value="{DynamicResource Turboland.Brush.DisabledForeground}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <!-- Menu separators are Separator controls, keyed by MenuItem.SeparatorStyleKey -->
+    <Style x:Key="{x:Static MenuItem.SeparatorStyleKey}" TargetType="Separator">
+        <Setter Property="Template" Value="{StaticResource TurbolandSeparatorTemplate}"/>
+    </Style>
+
+</ResourceDictionary>

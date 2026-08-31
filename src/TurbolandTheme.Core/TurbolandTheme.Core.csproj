@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <RootNamespace>TurbolandTheme.Core</RootNamespace>
+    <PackageId>TurbolandTheme.Core</PackageId>
+    <Version>0.1.0</Version>
+    <Description>Theme metadata and design token definitions for the Turboland IDE WPF theme (VGA palette, cell metrics, typography).</Description>
+  </PropertyGroup>
+</Project>

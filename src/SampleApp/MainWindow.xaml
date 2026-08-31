@@ -1,0 +1,165 @@
+<ctl:TurbolandWindow x:Class="SampleApp.MainWindow"
+                   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                   xmlns:ctl="clr-namespace:TurbolandTheme.Wpf.Controls;assembly=TurbolandTheme.Wpf"
+                   xmlns:local="clr-namespace:SampleApp"
+                   Title="TURBO SAMPLE APP"
+                   WindowStartupLocation="CenterScreen">
+
+    <!-- The root is TurbolandWindow, not Window: it draws the Turbo Vision frame inside
+         its own client area while keeping the native resize, Snap Layouts, maximise
+         and taskbar behavior. Nothing here sets WindowStyle, WindowChrome or the
+         text-rendering options - they all arrive with Turboland.Style.TurbolandWindow.
+
+         Width and Height are set in code from Turboland.Metric.Cell*, so the shell is
+         80x25 cells at any scale factor rather than a fixed pixel size. -->
+
+    <ctl:TurbolandWindow.CommandBindings>
+        <CommandBinding Command="{x:Static local:IdeCommands.Help}" Executed="OnHelp"/>
+        <CommandBinding Command="{x:Static local:IdeCommands.Save}" Executed="OnSave"/>
+        <CommandBinding Command="{x:Static local:IdeCommands.Open}" Executed="OnOpen"/>
+        <CommandBinding Command="{x:Static local:IdeCommands.Make}" Executed="OnCompile"/>
+        <CommandBinding Command="{x:Static local:IdeCommands.Compile}" Executed="OnCompile"/>
+        <CommandBinding Command="{x:Static local:IdeCommands.Run}" Executed="OnRun"/>
+        <CommandBinding Command="{x:Static local:IdeCommands.Preferences}" Executed="OnPreferences"/>
+        <CommandBinding Command="{x:Static local:IdeCommands.Exit}" Executed="OnExit"/>
+    </ctl:TurbolandWindow.CommandBindings>
+
+    <DockPanel>
+
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="_File">
+                <MenuItem Header="_Open..." Command="{x:Static local:IdeCommands.Open}"/>
+                <MenuItem Header="_New"/>
+                <MenuItem Header="_Save" Command="{x:Static local:IdeCommands.Save}"/>
+                <MenuItem Header="Save _as..."/>
+                <Separator/>
+                <MenuItem Header="_Change dir..."/>
+                <MenuItem Header="_Print"/>
+                <MenuItem Header="_DOS shell"/>
+                <Separator/>
+                <MenuItem Header="E_xit" Command="{x:Static local:IdeCommands.Exit}"/>
+            </MenuItem>
+            <MenuItem Header="_Edit">
+                <MenuItem Header="_Undo" Command="Undo"/>
+                <MenuItem Header="_Redo" Command="Redo"/>
+                <Separator/>
+                <MenuItem Header="Cu_t" Command="Cut"/>
+                <MenuItem Header="_Copy" Command="Copy"/>
+                <MenuItem Header="_Paste" Command="Paste"/>
+            </MenuItem>
+            <MenuItem Header="_Search">
+                <MenuItem Header="_Find..."/>
+                <MenuItem Header="_Replace..."/>
+                <MenuItem Header="_Search again"/>
+            </MenuItem>
+            <MenuItem Header="_Run">
+                <MenuItem Header="_Run" Command="{x:Static local:IdeCommands.Run}"/>
+                <MenuItem Header="_Step over"/>
+                <MenuItem Header="_Trace into"/>
+            </MenuItem>
+            <MenuItem Header="_Compile">
+                <MenuItem Header="_Compile" Command="{x:Static local:IdeCommands.Compile}"/>
+                <MenuItem Header="_Make" Command="{x:Static local:IdeCommands.Make}"/>
+                <MenuItem Header="_Build"/>
+            </MenuItem>
+            <MenuItem Header="_Options">
+                <MenuItem Header="_Compiler..."/>
+                <MenuItem Header="_Memory sizes..."/>
+                <MenuItem Header="_Linker..."/>
+                <MenuItem Header="De_bugger..."/>
+                <MenuItem Header="_Directories..."/>
+                <Separator/>
+                <MenuItem Header="_Environment...">
+                    <MenuItem Header="_Preferences..." Command="{x:Static local:IdeCommands.Preferences}"/>
+                    <MenuItem Header="_Editor..."/>
+                    <MenuItem Header="_Mouse..."/>
+                    <MenuItem Header="_Startup..."/>
+                    <MenuItem Header="_Colors..."/>
+                </MenuItem>
+            </MenuItem>
+            <MenuItem Header="_Window">
+                <MenuItem Header="_Tile"/>
+                <MenuItem Header="C_ascade"/>
+                <MenuItem Header="_Close all"/>
+            </MenuItem>
+            <MenuItem Header="_Help">
+                <MenuItem Header="_Contents"/>
+                <MenuItem Header="_About..." Command="{x:Static local:IdeCommands.Help}"/>
+            </MenuItem>
+        </Menu>
+
+        <!-- The DOS IDE 7 editor status line. StatusBar's default items panel is a
+             DockPanel, so the caret position docks right with no extra markup. -->
+        <StatusBar DockPanel.Dock="Bottom">
+            <ctl:StatusBarHint Key="F1" Label="Help"/>
+            <Separator/>
+            <ctl:StatusBarHint Key="F2" Label="Save"/>
+            <Separator/>
+            <ctl:StatusBarHint Key="F3" Label="Open"/>
+            <Separator/>
+            <ctl:StatusBarHint Key="Alt+F9" Label="Compile"/>
+            <Separator/>
+            <ctl:StatusBarHint Key="F9" Label="Make"/>
+            <Separator/>
+            <ctl:StatusBarHint Key="Alt+X" Label="Exit"/>
+            <StatusBarItem DockPanel.Dock="Right">
+                <TextBlock x:Name="Position" Text="1:1"/>
+            </StatusBarItem>
+        </StatusBar>
+
+        <!-- The blue desktop. The dialog host is a sibling laid over the content in the
+             same grid cell, so dialogs float above the editor and tool panel but never
+             over the menu or status bar - which is where Turbo Vision put them. It is
+             invisible and click-through until a dialog is actually opened. -->
+        <Grid>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Editor area. A plain TextBox: TurbolandEditor (gutter, syntax
+                     coloring, block cursor) is deliberately out of scope, so this
+                     shows the editor color tokens - yellow identifiers on the blue
+                     face - with WPF's editing behavior left completely untouched.
+
+                     VerticalContentAlignment must be Stretch. The theme's TextBox
+                     template template-binds it to the content host's VerticalAlignment,
+                     and the single-line default of Center would stop the host filling
+                     the box, so clicks below the last line would not reach the text. -->
+                <TextBox x:Name="Editor"
+                         Grid.Column="0"
+                         AcceptsReturn="True"
+                         AcceptsTab="True"
+                         VerticalScrollBarVisibility="Auto"
+                         HorizontalScrollBarVisibility="Auto"
+                         VerticalContentAlignment="Stretch"
+                         Background="{DynamicResource Turboland.Brush.EditorBackground}"
+                         Foreground="{DynamicResource Turboland.Brush.EditorForeground}"
+                         CaretBrush="{DynamicResource Turboland.Brush.EditorForeground}"
+                         SelectionBrush="{DynamicResource Turboland.Brush.EditorSelectionBackground}"
+                         SelectionTextBrush="{DynamicResource Turboland.Brush.EditorSelectionForeground}"
+                         SelectionChanged="OnEditorSelectionChanged"/>
+
+                <!-- Tool panel. Background is the caption mask for the group box border
+                     and Foreground/BorderBrush its ink, so on the blue desktop all three
+                     are restated: the theme defaults to the gray dialog face, where black
+                     ink is correct and would be nearly invisible here. -->
+                <GroupBox Grid.Column="1" Header="Watch"
+                          Background="{DynamicResource Turboland.Brush.DesktopBackground}"
+                          Foreground="{DynamicResource Turboland.Brush.DesktopForeground}"
+                          BorderBrush="{DynamicResource Turboland.Brush.DesktopForeground}">
+                    <ListBox x:Name="Watches" SelectedIndex="0">
+                        <ListBoxItem Content="Index: 7"/>
+                        <ListBoxItem Content="Result: 49"/>
+                        <ListBoxItem Content="Res: 49"/>
+                        <ListBoxItem Content="Sqr(Index): 49"/>
+                    </ListBox>
+                </GroupBox>
+            </Grid>
+
+            <ctl:TurbolandDialogHost x:Name="Dialogs"/>
+        </Grid>
+    </DockPanel>
+</ctl:TurbolandWindow>

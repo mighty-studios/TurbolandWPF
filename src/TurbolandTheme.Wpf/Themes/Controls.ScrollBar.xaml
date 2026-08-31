@@ -1,0 +1,177 @@
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- ============================================================
+         SCROLL BAR (classic, one-cell wide)
+         Gray track, gray face arrow buttons with black triangle,
+         gray thumb with black frame. Hover/open = blue with white.
+         ============================================================ -->
+
+    <Style x:Key="TurbolandScrollArrow" TargetType="RepeatButton">
+        <Setter Property="Focusable" Value="False"/>
+        <Setter Property="TextOptions.TextFormattingMode" Value="Display"/>
+        <Setter Property="TextOptions.TextRenderingMode" Value="Grayscale"/>
+        <Setter Property="SnapsToDevicePixels" Value="True"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="RepeatButton">
+                    <Border x:Name="face"
+                            Background="{DynamicResource Turboland.Brush.ControlFace}"
+                            BorderBrush="{DynamicResource Turboland.Brush.ControlShadow}"
+                            BorderThickness="{DynamicResource Turboland.Size.Border}"
+                            SnapsToDevicePixels="True">
+                        <!-- CP437 triangles, not Path geometry: a glyph scales
+                             with FontSize, a Geometry cannot scale from a
+                             resource. U+25B2/BC/C4/BA are all present in
+                             the bundled font. -->
+                        <TextBlock x:Name="arrow"
+                                   Text="&#x25B2;"
+                                   Foreground="{DynamicResource Turboland.Brush.FieldForeground}"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <!-- arrow direction per command -->
+                        <Trigger Property="Command" Value="{x:Static ScrollBar.LineDownCommand}">
+                            <Setter TargetName="arrow" Property="Text" Value="&#x25BC;"/>
+                        </Trigger>
+                        <Trigger Property="Command" Value="{x:Static ScrollBar.LineLeftCommand}">
+                            <Setter TargetName="arrow" Property="Text" Value="&#x25C4;"/>
+                        </Trigger>
+                        <Trigger Property="Command" Value="{x:Static ScrollBar.LineRightCommand}">
+                            <Setter TargetName="arrow" Property="Text" Value="&#x25BA;"/>
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="face" Property="Background" Value="{DynamicResource Turboland.Brush.ControlSelected}"/>
+                            <Setter TargetName="arrow" Property="Foreground" Value="{DynamicResource Turboland.Brush.ControlSelectedForeground}"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="face" Property="Background" Value="{DynamicResource Turboland.Brush.ControlSelected}"/>
+                            <Setter TargetName="arrow" Property="Foreground" Value="{DynamicResource Turboland.Brush.ControlSelectedForeground}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="TurbolandScrollThumb" TargetType="Thumb">
+        <Setter Property="SnapsToDevicePixels" Value="True"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Thumb">
+                    <Border x:Name="face"
+                            Background="{DynamicResource Turboland.Brush.ControlFace}"
+                            BorderBrush="{DynamicResource Turboland.Brush.ControlShadow}"
+                            BorderThickness="{DynamicResource Turboland.Size.Border}"
+                            SnapsToDevicePixels="True"/>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="face" Property="Background" Value="{DynamicResource Turboland.Brush.ControlSelected}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Invisible page buttons (track clicks jump a page) -->
+    <Style x:Key="TurbolandScrollPageButton" TargetType="RepeatButton">
+        <Setter Property="Focusable" Value="False"/>
+        <Setter Property="IsTabStop" Value="False"/>
+        <Setter Property="Opacity" Value="0"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="RepeatButton">
+                    <Border Background="Transparent"/>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <ControlTemplate x:Key="TurbolandVerticalScrollBarTemplate" TargetType="ScrollBar">
+        <Grid Background="{DynamicResource Turboland.Brush.WindowBackground}" SnapsToDevicePixels="True">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="{DynamicResource Turboland.Grid.ScrollBarButtonHeight}"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="{DynamicResource Turboland.Grid.ScrollBarButtonHeight}"/>
+            </Grid.RowDefinitions>
+            <RepeatButton x:Name="PART_LineUpButton"
+                          Grid.Row="0"
+                          Command="{x:Static ScrollBar.LineUpCommand}"
+                          Style="{StaticResource TurbolandScrollArrow}"/>
+            <Track x:Name="PART_Track"
+                   Grid.Row="1"
+                   IsEnabled="{TemplateBinding IsMouseOver}">
+                <Track.DecreaseRepeatButton>
+                    <RepeatButton Command="{x:Static ScrollBar.PageUpCommand}" Style="{StaticResource TurbolandScrollPageButton}"/>
+                </Track.DecreaseRepeatButton>
+                <Track.Thumb>
+                    <Thumb Style="{StaticResource TurbolandScrollThumb}"/>
+                </Track.Thumb>
+                <Track.IncreaseRepeatButton>
+                    <RepeatButton Command="{x:Static ScrollBar.PageDownCommand}" Style="{StaticResource TurbolandScrollPageButton}"/>
+                </Track.IncreaseRepeatButton>
+            </Track>
+            <RepeatButton x:Name="PART_LineDownButton"
+                          Grid.Row="2"
+                          Command="{x:Static ScrollBar.LineDownCommand}"
+                          Style="{StaticResource TurbolandScrollArrow}"/>
+        </Grid>
+    </ControlTemplate>
+
+    <ControlTemplate x:Key="TurbolandHorizontalScrollBarTemplate" TargetType="ScrollBar">
+        <Grid Background="{DynamicResource Turboland.Brush.WindowBackground}" SnapsToDevicePixels="True">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="{DynamicResource Turboland.Grid.ScrollBarButtonWidth}"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="{DynamicResource Turboland.Grid.ScrollBarButtonWidth}"/>
+            </Grid.ColumnDefinitions>
+            <RepeatButton x:Name="PART_LineLeftButton"
+                          Grid.Column="0"
+                          Command="{x:Static ScrollBar.LineLeftCommand}"
+                          Style="{StaticResource TurbolandScrollArrow}"/>
+            <Track x:Name="PART_Track"
+                   Grid.Column="1"
+                   IsEnabled="{TemplateBinding IsMouseOver}">
+                <Track.DecreaseRepeatButton>
+                    <RepeatButton Command="{x:Static ScrollBar.PageLeftCommand}" Style="{StaticResource TurbolandScrollPageButton}"/>
+                </Track.DecreaseRepeatButton>
+                <Track.Thumb>
+                    <Thumb Style="{StaticResource TurbolandScrollThumb}"/>
+                </Track.Thumb>
+                <Track.IncreaseRepeatButton>
+                    <RepeatButton Command="{x:Static ScrollBar.PageRightCommand}" Style="{StaticResource TurbolandScrollPageButton}"/>
+                </Track.IncreaseRepeatButton>
+            </Track>
+            <RepeatButton x:Name="PART_LineRightButton"
+                          Grid.Column="2"
+                          Command="{x:Static ScrollBar.LineRightCommand}"
+                          Style="{StaticResource TurbolandScrollArrow}"/>
+        </Grid>
+    </ControlTemplate>
+
+    <Style TargetType="ScrollBar">
+        <!-- Vertical is the default template: constrain WIDTH only. Setting
+             Height here would clamp a vertical scroll bar to one button,
+             leaving only the up arrow rendered. The horizontal trigger
+             swaps which axis is constrained.
+             The two axes use different tokens because the cell is 9x16:
+             a vertical bar is one cell wide (9), a horizontal bar one row tall (16). -->
+        <Setter Property="Width" Value="{DynamicResource Turboland.Metric.ScrollBarWidth}"/>
+        <Setter Property="MinWidth" Value="{DynamicResource Turboland.Metric.ScrollBarWidth}"/>
+        <Setter Property="SnapsToDevicePixels" Value="True"/>
+        <Setter Property="Template" Value="{StaticResource TurbolandVerticalScrollBarTemplate}"/>
+        <Style.Triggers>
+            <Trigger Property="Orientation" Value="Horizontal">
+                <Setter Property="Template" Value="{StaticResource TurbolandHorizontalScrollBarTemplate}"/>
+                <Setter Property="Width" Value="Auto"/>
+                <Setter Property="MinWidth" Value="0"/>
+                <Setter Property="Height" Value="{DynamicResource Turboland.Metric.ScrollBarHeight}"/>
+                <Setter Property="MinHeight" Value="{DynamicResource Turboland.Metric.ScrollBarHeight}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+</ResourceDictionary>

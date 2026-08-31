@@ -1,0 +1,113 @@
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:c="clr-namespace:TurbolandTheme.Wpf.Controls">
+
+    <!-- ============================================================
+         BUTTON
+         Rectangular green face (VGA 2), exactly one cell row tall and a
+         whole number of cells wide, with a hard black shadow one cell
+         right and half a row down. Body text black, the accelerator
+         letter yellow (VGA 14).
+
+         Three layers, only one of which is in the layout:
+           shadow  translated outside the box, so the face is not shrunk
+                   by it and the button still occupies exactly one row
+           face    the only child that measures - content + 1 cell padding
+           focus   a ring drawn just outside the face, so taking focus
+                   neither clips a glyph nor resizes the button
+
+         A button has NO outline: the face steps straight from the
+         surrounding surface to the green with no black pixel between.
+         Hover / focus / default therefore add the white ring rather
+         than recoloring an outline that should not exist. Pressed
+         slides the face one pixel into its own shadow, keeping its size
+         so the surrounding panel cannot reflow. No animation, no
+         rounding. Colors are defined in Tokens.Colors.xaml.
+         ============================================================ -->
+    <Style TargetType="Button">
+        <Setter Property="c:AcceleratorText.AcceleratorBrush" Value="{DynamicResource Turboland.Brush.ButtonAccelerator}"/>
+        <Setter Property="Background" Value="{DynamicResource Turboland.Brush.ButtonFace}"/>
+        <Setter Property="Foreground" Value="{DynamicResource Turboland.Brush.ButtonForeground}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource Turboland.Brush.ControlShadow}"/>
+        <Setter Property="FontFamily" Value="{DynamicResource Turboland.Font.Primary}"/>
+        <Setter Property="FontSize" Value="{DynamicResource Turboland.Font.Size.Primary}"/>
+        <Setter Property="Padding" Value="{DynamicResource Turboland.Size.ButtonPadding}"/>
+        <Setter Property="MinHeight" Value="{DynamicResource Turboland.Metric.CellHeight}"/>
+        <Setter Property="MinWidth" Value="{DynamicResource Turboland.Metric.ButtonMinWidth}"/>
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="TextOptions.TextFormattingMode" Value="Display"/>
+        <Setter Property="TextOptions.TextRenderingMode" Value="Grayscale"/>
+        <Setter Property="UseLayoutRounding" Value="True"/>
+        <Setter Property="SnapsToDevicePixels" Value="True"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Grid SnapsToDevicePixels="True" Background="Transparent">
+                        <!-- Hard shadow: the face rectangle translated one cell right and
+                             half a row down, painted outside the layout box. Equal and
+                             opposite margins mean it adds nothing to the measure. -->
+                        <Border x:Name="shadow"
+                                Margin="{DynamicResource Turboland.Size.ButtonShadowOffset}"
+                                Background="{DynamicResource Turboland.Brush.ButtonShadow}"/>
+                        <Border x:Name="face"
+                                Background="{TemplateBinding Background}"
+                                SnapsToDevicePixels="True">
+                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                              Margin="{TemplateBinding Padding}"
+                                              RecognizesAccessKey="True"
+                                              ContentTemplateSelector="{DynamicResource Turboland.Selector.Accelerator}"/>
+                        </Border>
+                        <!-- Focus ring, drawn outside the face. Zero thickness until a
+                             state asks for it, so an unfocused button has no outline. -->
+                        <Border x:Name="focus"
+                                Margin="{DynamicResource Turboland.Size.FocusRingOffset}"
+                                BorderBrush="{DynamicResource Turboland.Brush.FocusOutline}"
+                                BorderThickness="0"
+                                SnapsToDevicePixels="True"/>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <!-- hover: white ring (face color never changes) -->
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="focus" Property="BorderThickness" Value="{DynamicResource Turboland.Size.FocusBorder}"/>
+                        </Trigger>
+                        <!-- focused / default: white ring, green face retained -->
+                        <Trigger Property="IsKeyboardFocused" Value="True">
+                            <Setter TargetName="focus" Property="BorderThickness" Value="{DynamicResource Turboland.Size.FocusBorder}"/>
+                        </Trigger>
+                        <Trigger Property="IsDefaulted" Value="True">
+                            <Setter TargetName="focus" Property="BorderThickness" Value="{DynamicResource Turboland.Size.FocusBorder}"/>
+                        </Trigger>
+                        <!-- pressed: the face slides one pixel into its own shadow -->
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="face" Property="Margin" Value="{DynamicResource Turboland.Size.ButtonPressedOffset}"/>
+                            <Setter TargetName="face" Property="Background" Value="{Binding Background, RelativeSource={RelativeSource TemplatedParent}}"/>
+                            <Setter Property="Foreground" Value="{DynamicResource Turboland.Brush.ButtonForeground}"/>
+                        </Trigger>
+                        <!-- disabled: gray-out the face and label, keep the shape -->
+                        <Trigger Property="IsEnabled" Value="False">
+                            <!-- The shadow deliberately does NOT dim. It is part of the
+                                 button's shape, not a state indicator; dimming it would
+                                 paint it in DisabledForeground, which in Accessible mode
+                                 is a high-contrast color, making the shadow the loudest
+                                 thing on screen. State is carried by the face, the label
+                                 and the ring. -->
+                            <Setter TargetName="face" Property="Background" Value="{DynamicResource Turboland.Brush.ButtonDisabledFace}"/>
+                            <Setter Property="Foreground" Value="{DynamicResource Turboland.Brush.DisabledForeground}"/>
+                            <!-- Same reason as a disabled field: once the face can match
+                                 the surface the button stops looking like a button, so
+                                 the ring layer draws its outline. -->
+                            <Setter TargetName="focus" Property="BorderThickness" Value="{DynamicResource Turboland.Size.FocusBorder}"/>
+                            <Setter TargetName="focus" Property="BorderBrush" Value="{DynamicResource Turboland.Brush.DisabledForeground}"/>
+                            <!-- Never advertise a hot key that cannot be pressed. -->
+                            <Setter Property="c:AcceleratorText.AcceleratorBrush" Value="{DynamicResource Turboland.Brush.DisabledForeground}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+</ResourceDictionary>

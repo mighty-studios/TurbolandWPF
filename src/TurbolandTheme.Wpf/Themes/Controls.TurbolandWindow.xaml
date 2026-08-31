@@ -1,0 +1,259 @@
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:shell="clr-namespace:System.Windows.Shell;assembly=PresentationFramework"
+    xmlns:ctl="clr-namespace:TurbolandTheme.Wpf.Controls">
+
+    <!-- ============================================================
+         TURBOLAND WINDOW
+         A top-level window wearing a text-mode IDE frame: the title
+         sits ON the top frame line, the close box at the left of it
+         and the zoom box at the right.
+
+         Active vs inactive is a change of LINE WEIGHT, not color:
+         every frame is drawn in white (palette 15) and switches
+         between the double-line and single-line box glyphs, so the
+         IsActive trigger swaps glyphs rather than brushes.
+
+         Every glyph is written as a numeric character reference so
+         the file's encoding can never silently corrupt the frame.
+
+         The behavior that makes this frame survive contact with
+         Windows - the maximise clamp, the resize band, Snap Layouts
+         and the zoom-box hover - lives in TurbolandWindow.cs, not here.
+         ============================================================ -->
+
+    <!-- Frame runs and corners: white, and never interactive. -->
+    <Style x:Key="Turboland.Style.FrameGlyph" TargetType="ctl:GlyphFill">
+        <Setter Property="Foreground" Value="{DynamicResource Turboland.Brush.FrameActive}"/>
+    </Style>
+
+    <Style x:Key="Turboland.Style.FrameText" TargetType="TextBlock">
+        <Setter Property="Foreground" Value="{DynamicResource Turboland.Brush.FrameActive}"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="TextOptions.TextFormattingMode" Value="Display"/>
+        <Setter Property="TextOptions.TextRenderingMode" Value="Grayscale"/>
+    </Style>
+
+    <!-- The close box is an ordinary WPF button: it is marked hit-test
+         visible in chrome, so it keeps real click and hover events.
+         The zoom box cannot do this - it must answer HTMAXBUTTON to get
+         the Snap Layouts flyout, which costs it all WPF mouse input. -->
+    <Style x:Key="Turboland.Style.FrameCloseBox" TargetType="Button">
+        <Setter Property="Foreground" Value="{DynamicResource Turboland.Brush.FrameActive}"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Focusable" Value="False"/>
+        <Setter Property="shell:WindowChrome.IsHitTestVisibleInChrome" Value="True"/>
+        <Setter Property="Command" Value="{x:Static SystemCommands.CloseWindowCommand}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="face" Background="{TemplateBinding Background}">
+                        <!-- Three TextBlocks rather than one with inline Runs: the square
+                             is a different color from the brackets, and only a named
+                             FrameworkElement can be reached by a TargetName setter.
+                             Monospace advances are integral, so this lays out exactly as
+                             a single three-character run would. -->
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock x:Name="bracketLeft" Text="["
+                                       Foreground="{TemplateBinding Foreground}"
+                                       TextOptions.TextFormattingMode="Display"
+                                       TextOptions.TextRenderingMode="Grayscale"/>
+                            <TextBlock x:Name="mark" Text="&#x25A0;"
+                                       Foreground="{DynamicResource Turboland.Brush.FrameCloseMark}"
+                                       TextOptions.TextFormattingMode="Display"
+                                       TextOptions.TextRenderingMode="Grayscale"/>
+                            <TextBlock x:Name="bracketRight" Text="]"
+                                       Foreground="{TemplateBinding Foreground}"
+                                       TextOptions.TextFormattingMode="Display"
+                                       TextOptions.TextRenderingMode="Grayscale"/>
+                        </StackPanel>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <!-- Reverse video, the only highlight a text-mode UI offers. The
+                             green square inverts with everything else; leaving it green
+                             on a white face would be barely legible. -->
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="face" Property="Background"
+                                    Value="{DynamicResource Turboland.Brush.FrameActive}"/>
+                            <Setter TargetName="bracketLeft" Property="Foreground"
+                                    Value="{DynamicResource Turboland.Brush.DesktopBackground}"/>
+                            <Setter TargetName="mark" Property="Foreground"
+                                    Value="{DynamicResource Turboland.Brush.DesktopBackground}"/>
+                            <Setter TargetName="bracketRight" Property="Foreground"
+                                    Value="{DynamicResource Turboland.Brush.DesktopBackground}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="Turboland.Style.TurbolandWindow" TargetType="ctl:TurbolandWindow">
+        <Setter Property="Background" Value="{DynamicResource Turboland.Brush.DesktopBackground}"/>
+        <Setter Property="Foreground" Value="{DynamicResource Turboland.Brush.DesktopForeground}"/>
+        <Setter Property="FontFamily" Value="{DynamicResource Turboland.Font.Primary}"/>
+        <Setter Property="FontSize" Value="{DynamicResource Turboland.Font.Size.Primary}"/>
+        <Setter Property="TextOptions.TextFormattingMode" Value="Display"/>
+        <Setter Property="TextOptions.TextRenderingMode" Value="Grayscale"/>
+        <Setter Property="UseLayoutRounding" Value="True"/>
+        <Setter Property="SnapsToDevicePixels" Value="True"/>
+
+        <!-- WindowStyle=None removes the native title bar; WindowChrome puts back
+             the native resize, snap, maximise and taskbar behavior that removing
+             it would otherwise cost. AllowsTransparency must stay False - it is
+             mutually exclusive with WindowChrome's non-client area. -->
+        <Setter Property="WindowStyle" Value="None"/>
+        <Setter Property="AllowsTransparency" Value="False"/>
+        <Setter Property="shell:WindowChrome.WindowChrome">
+            <Setter.Value>
+                <shell:WindowChrome
+                    CaptionHeight="{DynamicResource Turboland.Metric.TitleBarHeight}"
+                    ResizeBorderThickness="{DynamicResource Turboland.Size.ResizeBorder}"
+                    CornerRadius="0"
+                    GlassFrameThickness="0"
+                    NonClientFrameEdges="None"
+                    UseAeroCaptionButtons="False"/>
+            </Setter.Value>
+        </Setter>
+
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ctl:TurbolandWindow">
+                    <Border Background="{TemplateBinding Background}"
+                            SnapsToDevicePixels="True">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            <!-- Top frame line: corner, close box, rule, title, rule,
+                                 zoom box, corner. The two star columns keep the title
+                                 centred however wide the window gets. -->
+                            <Grid Grid.Row="0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+
+                                <ctl:GlyphFill x:Name="cornerTopLeft" Grid.Column="0"
+                                               Glyph="&#x2554;"
+                                               Style="{StaticResource Turboland.Style.FrameGlyph}"/>
+
+                                <Button x:Name="closeBox" Grid.Column="1"
+                                        Style="{StaticResource Turboland.Style.FrameCloseBox}"/>
+
+                                <ctl:GlyphFill x:Name="ruleLeft" Grid.Column="2"
+                                               Glyph="&#x2550;"
+                                               Style="{StaticResource Turboland.Style.FrameGlyph}"/>
+
+                                <TextBlock x:Name="title" Grid.Column="3"
+                                           Text="{TemplateBinding Title}"
+                                           Padding="{DynamicResource Turboland.Size.CellPadding}"
+                                           Style="{StaticResource Turboland.Style.FrameText}"/>
+
+                                <ctl:GlyphFill x:Name="ruleRight" Grid.Column="4"
+                                               Glyph="&#x2550;"
+                                               Style="{StaticResource Turboland.Style.FrameGlyph}"/>
+
+                                <!-- No IsHitTestVisibleInChrome: this box is claimed by
+                                     WM_NCHITTEST as HTMAXBUTTON so Windows shows the
+                                     Snap Layouts flyout on hover. That makes it
+                                     non-client, so its highlight is driven by
+                                     IsZoomBoxHighlighted rather than IsMouseOver. -->
+                                <Border x:Name="PART_ZoomBox" Grid.Column="5"
+                                        Background="Transparent">
+                                    <TextBlock x:Name="zoomGlyph"
+                                               Text="[&#x2191;]"
+                                               Style="{StaticResource Turboland.Style.FrameText}"/>
+                                </Border>
+
+                                <ctl:GlyphFill x:Name="cornerTopRight" Grid.Column="6"
+                                               Glyph="&#x2557;"
+                                               Style="{StaticResource Turboland.Style.FrameGlyph}"/>
+                            </Grid>
+
+                            <!-- Content, flanked by the vertical frame runs. -->
+                            <Grid Grid.Row="1">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+
+                                <ctl:GlyphFill x:Name="edgeLeft" Grid.Column="0"
+                                               Glyph="&#x2551;" Orientation="Vertical"
+                                               Style="{StaticResource Turboland.Style.FrameGlyph}"/>
+
+                                <AdornerDecorator Grid.Column="1">
+                                    <ContentPresenter/>
+                                </AdornerDecorator>
+
+                                <ctl:GlyphFill x:Name="edgeRight" Grid.Column="2"
+                                               Glyph="&#x2551;" Orientation="Vertical"
+                                               Style="{StaticResource Turboland.Style.FrameGlyph}"/>
+                            </Grid>
+
+                            <!-- Bottom frame line. -->
+                            <Grid Grid.Row="2">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+
+                                <ctl:GlyphFill x:Name="cornerBottomLeft" Grid.Column="0"
+                                               Glyph="&#x255A;"
+                                               Style="{StaticResource Turboland.Style.FrameGlyph}"/>
+
+                                <ctl:GlyphFill x:Name="ruleBottom" Grid.Column="1"
+                                               Glyph="&#x2550;"
+                                               Style="{StaticResource Turboland.Style.FrameGlyph}"/>
+
+                                <ctl:GlyphFill x:Name="cornerBottomRight" Grid.Column="2"
+                                               Glyph="&#x255D;"
+                                               Style="{StaticResource Turboland.Style.FrameGlyph}"/>
+                            </Grid>
+                        </Grid>
+                    </Border>
+
+                    <ControlTemplate.Triggers>
+                        <!-- Inactive: drop to the single-line box glyphs. The color is
+                             unchanged. -->
+                        <Trigger Property="IsActive" Value="False">
+                            <Setter TargetName="cornerTopLeft" Property="Glyph" Value="&#x250C;"/>
+                            <Setter TargetName="cornerTopRight" Property="Glyph" Value="&#x2510;"/>
+                            <Setter TargetName="cornerBottomLeft" Property="Glyph" Value="&#x2514;"/>
+                            <Setter TargetName="cornerBottomRight" Property="Glyph" Value="&#x2518;"/>
+                            <Setter TargetName="ruleLeft" Property="Glyph" Value="&#x2500;"/>
+                            <Setter TargetName="ruleRight" Property="Glyph" Value="&#x2500;"/>
+                            <Setter TargetName="ruleBottom" Property="Glyph" Value="&#x2500;"/>
+                            <Setter TargetName="edgeLeft" Property="Glyph" Value="&#x2502;"/>
+                            <Setter TargetName="edgeRight" Property="Glyph" Value="&#x2502;"/>
+                        </Trigger>
+
+                        <!-- Zoomed windows show the restore arrow. -->
+                        <Trigger Property="WindowState" Value="Maximized">
+                            <Setter TargetName="zoomGlyph" Property="Text" Value="[&#x2195;]"/>
+                        </Trigger>
+
+                        <Trigger Property="IsZoomBoxHighlighted" Value="True">
+                            <Setter TargetName="PART_ZoomBox" Property="Background"
+                                    Value="{DynamicResource Turboland.Brush.FrameActive}"/>
+                            <Setter TargetName="zoomGlyph" Property="Foreground"
+                                    Value="{DynamicResource Turboland.Brush.DesktopBackground}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+</ResourceDictionary>

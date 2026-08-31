@@ -1,0 +1,131 @@
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:sys="clr-namespace:System;assembly=System.Runtime">
+
+    <!-- ============================================================
+         TURBOLAND THEME - ACCESSIBLE MODE OVERRIDES
+
+         WHAT THIS MODE IS. A legibility variant, not a layout variant.
+         Its contract is: every text pair the theme actually renders
+         reaches WCAG AA (4.5:1), no meaning is carried by color
+         alone, and focus is unmistakable.
+
+         WHAT IT IS NOT. It does not resize anything. Larger controls
+         and larger fonts come from the *scale axis*, which is
+         orthogonal to mode; TurbolandTheme.ResolveScaleFactor already
+         floors this mode at 2x. Making the mode resize things as well
+         would produce non-integer cells, which is the one thing the
+         character grid exists to prevent.
+
+         Same token names as the authentic palette, and no new colors:
+         only re-mappings within the 16-color palette, plus flags that
+         switch a cue from hue to chrome.
+
+         THE PALETTE IS THE BINDING CONSTRAINT, and it is tighter than
+         it looks. Of the 16 colors, those reaching AA are:
+            on Light Gray (7): Black 9.04, Blue 5.72  - and nothing else
+            on Green (2):      Black 6.75             - and nothing else
+            on Cyan (3):       Black 7.33, Blue 4.64
+         Every override below is forced by that table rather than
+         chosen. Where the table offers nothing, the deviation is
+         documented rather than papered over.
+
+         ContrastTest asserts all of this against the live resolved
+         theme, so these numbers cannot rot.
+         ============================================================ -->
+
+    <!-- ============ SELECTION: green to blue ============
+         White on green is 3.11:1 and fails; white on blue is 13.29:1.
+         Blue/white is the only high-contrast selection pair the palette
+         offers.
+
+         The menu override is included for consistency rather than
+         necessity: black on green already measures 6.75:1 and passes.
+         Overriding it too is what makes every selection in the theme a
+         single color. -->
+    <SolidColorBrush x:Key="Turboland.Brush.MenuSelectionBackground" Color="{DynamicResource Turboland.Color.Palette.1}" />
+    <SolidColorBrush x:Key="Turboland.Brush.MenuSelectionForeground" Color="{DynamicResource Turboland.Color.Palette.15}" />
+    <SolidColorBrush x:Key="Turboland.Brush.FieldSelectionBackground" Color="{DynamicResource Turboland.Color.Palette.1}" />
+    <SolidColorBrush x:Key="Turboland.Brush.ControlSelected" Color="{DynamicResource Turboland.Color.Palette.1}" />
+
+    <!-- ============ ACCELERATORS: color to underline ============
+         Authentic mode marks the hot key by hue alone: red on the menu,
+         yellow on buttons and fields. All three fail AA (3.34, 2.92,
+         2.69) and also fail WCAG 1.4.1, since hue is the only cue.
+
+         No better hue exists. The character must stay legible both on
+         the resting surface and on the selection bar, and no single
+         palette color does both. So the hot key gives up having a
+         color of its own and inherits the label's, which makes it
+         exactly as legible as the text it sits in, in every state, by
+         construction rather than by another lookup table.
+
+         This is a flag rather than four x:Null brush overrides,
+         because x:Null cannot express an override: WPF cannot tell a
+         null dictionary entry from a missing one, so the lookup falls
+         through to the authentic color and the override silently does
+         nothing.
+
+         The underline flag below is what carries the signal instead. -->
+    <sys:Boolean x:Key="Turboland.Flag.AcceleratorInheritColor">True</sys:Boolean>
+
+    <!-- The status-bar key is not an AcceleratorText (StatusBarHint draws it as a
+         fixed Run), so the flag above does not reach it and it needs its own
+         override. Red on light gray is 3.34:1. Black is 9.04:1 and is the only
+         choice: the palette offers exactly two colors reaching AA on light gray,
+         and the other one is DisabledForeground, so a status-bar key painted in it
+         would read as disabled. The red anchor is lost, but a key such as "F1"
+         remains identifiable by position and content, so no information is left
+         carried by color alone. -->
+    <SolidColorBrush x:Key="Turboland.Brush.StatusBarAccelerator" Color="{DynamicResource Turboland.Color.Palette.0}" />
+
+    <!-- Color alone fails WCAG 1.4.1, and the accelerator now has no hue of its
+         own at all, so the underline is what identifies the access key. -->
+    <sys:Boolean x:Key="Turboland.Flag.AcceleratorUnderline">True</sys:Boolean>
+
+    <!-- ============ FOCUS ============
+         A thicker ring is affordable only because focus chrome is drawn
+         *outside* the layout box, so thickening it costs no layout at
+         all; a ring inside the box would resize every focused control.
+         The offset must stay equal and opposite to the thickness or the
+         ring eats into the content. GridAlignmentTest pins that. -->
+    <sys:Double x:Key="Turboland.Metric.FocusBorder">2</sys:Double>
+    <Thickness x:Key="Turboland.Size.FocusBorder">2</Thickness>
+    <Thickness x:Key="Turboland.Size.FocusRingOffset">-2</Thickness>
+    <!-- The ring overhangs by 2 here rather than 1, so a clipping container has to
+         reserve 2 on the left and top or this mode loses exactly the focus indicator
+         it exists to strengthen. Right/bottom is still governed by the button
+         shadow, which does not change per mode. -->
+    <Thickness x:Key="Turboland.Size.ChromeInset">2,2,9,7</Thickness>
+
+    <!-- Yellow is the strongest ring signal available against the green and gray
+         faces, and it is never used as a face color, so a ring can never blend
+         into whatever it surrounds. -->
+    <SolidColorBrush x:Key="Turboland.Brush.FocusOutline" Color="{DynamicResource Turboland.Color.Palette.14}" />
+
+    <!-- White on the cyan field measures 2.86:1; black is 7.33:1. Recoloring to
+         black removes the hue-based focus cue, which is why the 2px ring above is
+         part of the same change: the signal moves from hue to chrome. -->
+    <SolidColorBrush x:Key="Turboland.Brush.FieldFocusedForeground" Color="{DynamicResource Turboland.Color.Palette.0}" />
+
+    <!-- ============ DISABLED ============
+         Dark gray on light gray is 3.21:1. Blue is 5.72:1, keeps a clear
+         "not enabled" signal, and cannot be confused with the black used
+         for enabled text. -->
+    <SolidColorBrush x:Key="Turboland.Brush.DisabledForeground" Color="{DynamicResource Turboland.Color.Palette.1}" />
+
+    <!-- A disabled push button cannot be fixed by dimming its label: black is the
+         only color reaching AA on green, and black is already the enabled label.
+         So the *face* changes instead, to light gray. That reads as the universal
+         "greyed out" and keeps a disabled button obviously distinct from an enabled
+         green one; blue on light gray is then 5.72:1. -->
+    <SolidColorBrush x:Key="Turboland.Brush.ButtonDisabledFace" Color="{DynamicResource Turboland.Color.Palette.7}" />
+
+    <!-- ============ EDITOR ============
+         Dark gray on black is 2.82:1; light gray is 9.04:1. Overridden even though
+         no control currently renders the gutter, so the pair is correct as soon as
+         one does. -->
+    <SolidColorBrush x:Key="Turboland.Brush.EditorGutterForeground" Color="{DynamicResource Turboland.Color.Palette.7}" />
+
+</ResourceDictionary>

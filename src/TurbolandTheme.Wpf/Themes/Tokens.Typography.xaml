@@ -1,0 +1,60 @@
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:sys="clr-namespace:System;assembly=System.Runtime">
+
+    <!-- ============================================================
+         TURBOLAND THEME - TYPOGRAPHY TOKENS
+
+         Primary face: bundled Px437 IBM VGA 9x16 (DOS 437 charset).
+
+         WPF never uses a font's embedded bitmap strikes, so a "bitmap
+         font" is always outline-rasterised and crispness has to come
+         from the rendering settings rather than from the file. These
+         are applied by TurbolandTheme.Apply:
+           TextOptions.TextFormattingMode = Display
+           TextOptions.TextRenderingMode  = Grayscale
+           UseLayoutRounding              = True
+
+         The font size is chosen so the face's 1.0em line height lands
+         exactly on the 16 px base cell, which yields the font's native
+         9x16 pixel cell with no fractional advance. TurbolandTheme.Apply
+         rewrites the size for the integer scale factor.
+         ============================================================ -->
+
+    <FontFamily x:Key="Turboland.Font.Primary">pack://application:,,,/TurbolandTheme.Wpf;component/Fonts/Px437_IBM_VGA_9x16.ttf#Px437 IBM VGA 9x16</FontFamily>
+
+    <!-- Fallbacks for characters outside 437 (Unicode, localization, a11y) -->
+    <FontFamily x:Key="Turboland.Font.Fallback">Consolas, Courier New, monospace</FontFamily>
+
+    <sys:Double x:Key="Turboland.Font.Size.Primary">16</sys:Double>
+    <sys:Double x:Key="Turboland.Font.Size.Dialog">16</sys:Double>
+    <sys:Double x:Key="Turboland.Font.Size.StatusBar">16</sys:Double>
+
+    <!-- Accelerator (hot key) presentation.
+
+         Authentic mode marks the access key by coloring it and draws no
+         underline, which is what the original text-mode UI did: the glyph cell
+         is clean, with its lowest rows empty.
+
+         Accessible mode turns the underline on, because color alone is not a
+         sufficient distinction (WCAG 1.4.1, Use of Color).
+
+         Deliberately NOT a Turboland.Metric.* key. That prefix is what
+         TurbolandTheme.Apply multiplies by the scale factor, and this is a flag
+         rather than a measurement. -->
+    <sys:Boolean x:Key="Turboland.Flag.AcceleratorUnderline">False</sys:Boolean>
+
+    <!-- Companion to the flag above: whether the access key takes the surrounding
+         text color instead of a hue of its own.
+
+         Authentic says no, because the hue is itself the marking: red on gray,
+         yellow on cyan, yellow on green. Accessible says yes, because a fixed hue
+         would have to stay legible both on the resting surface and on the selection
+         bar, and no palette color manages both.
+
+         Same reasoning as above about the Turboland.Metric.* prefix: this is a flag,
+         not a measurement, so it must not be scaled. -->
+    <sys:Boolean x:Key="Turboland.Flag.AcceleratorInheritColor">False</sys:Boolean>
+
+</ResourceDictionary>

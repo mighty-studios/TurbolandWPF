@@ -1,0 +1,8 @@
+<Application x:Class="SampleApp.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <!-- No StartupUri and no merged dictionaries on purpose. The theme has to be
+         applied before the first window is constructed, because TurbolandWindow
+         resolves its style (and therefore its WindowChrome) from application
+         resources at construction time. App.OnStartup does both, in that order. -->
+</Application>

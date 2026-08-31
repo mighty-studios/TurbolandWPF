@@ -1,0 +1,138 @@
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- ============================================================
+         TURBOLAND THEME - COLOR TOKENS (authentic values)
+
+         Two layers. The raw VGA 16 color palette is fixed hardware
+         data and must never be tuned. Everything else is a semantic
+         brush that names a *role* and resolves to one of those 16
+         entries, so a control template never refers to a hue.
+
+         Mirrors TurbolandTheme.Core.ColorTokens; the two must agree.
+         ============================================================ -->
+
+    <!-- Raw VGA palette (indices 0-15) -->
+    <Color x:Key="Turboland.Color.Palette.0">#FF000000</Color> <!-- Black -->
+    <Color x:Key="Turboland.Color.Palette.1">#FF0000AA</Color> <!-- Blue -->
+    <Color x:Key="Turboland.Color.Palette.2">#FF00AA00</Color> <!-- Green -->
+    <Color x:Key="Turboland.Color.Palette.3">#FF00AAAA</Color> <!-- Cyan -->
+    <Color x:Key="Turboland.Color.Palette.4">#FFAA0000</Color> <!-- Red -->
+    <Color x:Key="Turboland.Color.Palette.5">#FFAA00AA</Color> <!-- Magenta -->
+    <Color x:Key="Turboland.Color.Palette.6">#FFAA5500</Color> <!-- Brown -->
+    <Color x:Key="Turboland.Color.Palette.7">#FFAAAAAA</Color> <!-- Light Gray -->
+    <Color x:Key="Turboland.Color.Palette.8">#FF555555</Color> <!-- Dark Gray -->
+    <Color x:Key="Turboland.Color.Palette.9">#FF5555FF</Color> <!-- Light Blue -->
+    <Color x:Key="Turboland.Color.Palette.10">#FF55FF55</Color> <!-- Light Green -->
+    <Color x:Key="Turboland.Color.Palette.11">#FF55FFFF</Color> <!-- Light Cyan -->
+    <Color x:Key="Turboland.Color.Palette.12">#FFFF5555</Color> <!-- Light Red -->
+    <Color x:Key="Turboland.Color.Palette.13">#FFFF55FF</Color> <!-- Pink -->
+    <Color x:Key="Turboland.Color.Palette.14">#FFFFFF55</Color> <!-- Yellow -->
+    <Color x:Key="Turboland.Color.Palette.15">#FFFFFFFF</Color> <!-- White -->
+
+    <!-- ============================================================
+         SEMANTIC MAPPINGS
+
+         The scheme is: light gray chrome (menu bar, status bar, dialog
+         faces) carrying black text with red accelerators; green push
+         buttons and green as the single selection accent everywhere;
+         cyan option panels; a blue desktop and a blue editor body.
+         ============================================================ -->
+
+    <!-- Desktop -->
+    <SolidColorBrush x:Key="Turboland.Brush.DesktopBackground" Color="{DynamicResource Turboland.Color.Palette.1}" />
+    <SolidColorBrush x:Key="Turboland.Brush.DesktopForeground" Color="{DynamicResource Turboland.Color.Palette.7}" />
+
+    <!-- Windows and dialogs -->
+    <SolidColorBrush x:Key="Turboland.Brush.WindowBackground" Color="{DynamicResource Turboland.Color.Palette.7}" />
+    <SolidColorBrush x:Key="Turboland.Brush.WindowForeground" Color="{DynamicResource Turboland.Color.Palette.0}" />
+    <SolidColorBrush x:Key="Turboland.Brush.FrameActive" Color="{DynamicResource Turboland.Color.Palette.15}" />
+    <!-- Activation is signalled by line weight as well as hue: an active frame is
+         drawn with the double line glyphs, an inactive one with the single line
+         set. The colors stay distinct so the state survives either cue alone. -->
+    <SolidColorBrush x:Key="Turboland.Brush.FrameInactive" Color="{DynamicResource Turboland.Color.Palette.7}" />
+    <!-- Only the filled square inside the close box is green. The brackets around
+         it are drawn in the frame color like the rest of the border. -->
+    <SolidColorBrush x:Key="Turboland.Brush.FrameCloseMark" Color="{DynamicResource Turboland.Color.Palette.10}" />
+
+    <!-- Menu bar and dropdowns -->
+    <SolidColorBrush x:Key="Turboland.Brush.MenuBackground" Color="{DynamicResource Turboland.Color.Palette.7}" />
+    <SolidColorBrush x:Key="Turboland.Brush.MenuForeground" Color="{DynamicResource Turboland.Color.Palette.0}" />
+    <SolidColorBrush x:Key="Turboland.Brush.MenuSelectionBackground" Color="{DynamicResource Turboland.Color.Palette.2}" />
+    <!-- Highlighting a menu item changes only its background; the text stays black. -->
+    <SolidColorBrush x:Key="Turboland.Brush.MenuSelectionForeground" Color="{DynamicResource Turboland.Color.Palette.0}" />
+    <!-- Applied whether or not the item is highlighted, so a hot key is always locatable. -->
+    <SolidColorBrush x:Key="Turboland.Brush.MenuAccelerator" Color="{DynamicResource Turboland.Color.Palette.4}" />
+
+    <!-- Status bar: same face as the menu bar, but tokenised separately so one can
+         be restyled without dragging the other with it. -->
+    <SolidColorBrush x:Key="Turboland.Brush.StatusBarBackground" Color="{DynamicResource Turboland.Color.Palette.7}" />
+    <SolidColorBrush x:Key="Turboland.Brush.StatusBarForeground" Color="{DynamicResource Turboland.Color.Palette.0}" />
+    <SolidColorBrush x:Key="Turboland.Brush.StatusBarAccelerator" Color="{DynamicResource Turboland.Color.Palette.4}" />
+    <!-- Black, the same ink as the labels, because the separator is a drawn CP437
+         0xB3 glyph occupying a whole character cell rather than a rule between cells. -->
+    <SolidColorBrush x:Key="Turboland.Brush.StatusBarSeparator" Color="{DynamicResource Turboland.Color.Palette.0}" />
+
+    <!-- Input fields and option panels (list boxes, radio/check groups) -->
+    <SolidColorBrush x:Key="Turboland.Brush.FieldBackground" Color="{DynamicResource Turboland.Color.Palette.3}" />
+    <SolidColorBrush x:Key="Turboland.Brush.FieldForeground" Color="{DynamicResource Turboland.Color.Palette.0}" />
+    <!-- A focused option row keeps the cyan face and recolors only its text. -->
+    <SolidColorBrush x:Key="Turboland.Brush.FieldFocusedForeground" Color="{DynamicResource Turboland.Color.Palette.15}" />
+    <SolidColorBrush x:Key="Turboland.Brush.FieldSelectionBackground" Color="{DynamicResource Turboland.Color.Palette.2}" />
+    <SolidColorBrush x:Key="Turboland.Brush.FieldSelectionForeground" Color="{DynamicResource Turboland.Color.Palette.15}" />
+    <!-- Yellow rather than the menu bar's red: the accelerator here sits on the cyan
+         panel face, where red is too dark to separate from the black body text. -->
+    <SolidColorBrush x:Key="Turboland.Brush.FieldAccelerator" Color="{DynamicResource Turboland.Color.Palette.14}" />
+
+    <!-- Push buttons: green face, black text, yellow accelerator, black shadow -->
+    <SolidColorBrush x:Key="Turboland.Brush.ButtonFace" Color="{DynamicResource Turboland.Color.Palette.2}" />
+    <SolidColorBrush x:Key="Turboland.Brush.ButtonForeground" Color="{DynamicResource Turboland.Color.Palette.0}" />
+    <SolidColorBrush x:Key="Turboland.Brush.ButtonAccelerator" Color="{DynamicResource Turboland.Color.Palette.14}" />
+    <SolidColorBrush x:Key="Turboland.Brush.ButtonShadow" Color="{DynamicResource Turboland.Color.Palette.0}" />
+    <!-- The face of a disabled button, kept green in authentic mode so a disabled
+         button still reads as a button; only the label dims.
+
+         This is a token in its own right rather than a reuse of ButtonFace because
+         black is the only palette color that reaches WCAG AA against green, and
+         black is already the enabled label. Legibility for the disabled state can
+         therefore only come from changing the face, which is what accessible mode
+         overrides this token to do. -->
+    <SolidColorBrush x:Key="Turboland.Brush.ButtonDisabledFace" Color="{DynamicResource Turboland.Color.Palette.2}" />
+
+    <!-- Code editor. The body is blue, not black. -->
+    <SolidColorBrush x:Key="Turboland.Brush.EditorBackground" Color="{DynamicResource Turboland.Color.Palette.1}" />
+    <SolidColorBrush x:Key="Turboland.Brush.EditorForeground" Color="{DynamicResource Turboland.Color.Palette.14}" />
+    <SolidColorBrush x:Key="Turboland.Brush.EditorKeywordForeground" Color="{DynamicResource Turboland.Color.Palette.15}" />
+    <SolidColorBrush x:Key="Turboland.Brush.EditorGutterBackground" Color="{DynamicResource Turboland.Color.Palette.0}" />
+    <SolidColorBrush x:Key="Turboland.Brush.EditorGutterForeground" Color="{DynamicResource Turboland.Color.Palette.8}" />
+    <!-- Light gray on black, because the editor face is itself blue and a blue
+         selection would be invisible against it. -->
+    <SolidColorBrush x:Key="Turboland.Brush.EditorSelectionBackground" Color="{DynamicResource Turboland.Color.Palette.7}" />
+    <SolidColorBrush x:Key="Turboland.Brush.EditorSelectionForeground" Color="{DynamicResource Turboland.Color.Palette.0}" />
+
+    <!-- Focus, shadow, states -->
+    <!-- White reads as a highlight against every face the theme paints. Accessible
+         mode overrides this to yellow for a stronger indicator. -->
+    <SolidColorBrush x:Key="Turboland.Brush.FocusOutline" Color="{DynamicResource Turboland.Color.Palette.15}" />
+    <SolidColorBrush x:Key="Turboland.Brush.Shadow" Color="{DynamicResource Turboland.Color.Palette.0}" />
+    <!-- Currently unreferenced by any template. Worth knowing before wiring it up:
+         on the light gray window face the only palette colors reaching WCAG AA are
+         black (9.04:1), which is already the body text, and blue (5.72:1), which is
+         already the disabled foreground. Light red measures 1.35:1 and is not
+         legible as body text. A style that is both readable and distinct therefore
+         has to be reverse video, which needs an error *background* token as well
+         as this one. -->
+    <SolidColorBrush x:Key="Turboland.Brush.ErrorForeground" Color="{DynamicResource Turboland.Color.Palette.12}" />
+    <SolidColorBrush x:Key="Turboland.Brush.DisabledForeground" Color="{DynamicResource Turboland.Color.Palette.8}" />
+
+    <!-- Gray controls: scroll bars, combo drop buttons, tab strip. Deliberately
+         distinct from ButtonFace so that a scroll bar never reads as pressable. -->
+    <SolidColorBrush x:Key="Turboland.Brush.ControlFace" Color="{DynamicResource Turboland.Color.Palette.7}" />
+    <SolidColorBrush x:Key="Turboland.Brush.ControlShadow" Color="{DynamicResource Turboland.Color.Palette.0}" />
+    <!-- One selection accent shared by menus, lists and fields, so selection looks
+         the same wherever it appears. -->
+    <SolidColorBrush x:Key="Turboland.Brush.ControlSelected" Color="{DynamicResource Turboland.Color.Palette.2}" />
+    <SolidColorBrush x:Key="Turboland.Brush.ControlSelectedForeground" Color="{DynamicResource Turboland.Color.Palette.15}" />
+
+</ResourceDictionary>
