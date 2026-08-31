@@ -102,3 +102,13 @@ used under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/).
 
 This project is an independent tribute to the look of 1990s DOS text-mode IDEs. It is
 not affiliated with or endorsed by any IDE vendor.
+
+---  
+  
+>If you enjoy this project, please consider:
+
+<a href="https://www.buymeacoffee.com/mighty_studios" target="_blank">
+  <img src="https://cdn.buymeacoffee.com/buttons/default-yellow.png" alt="Buy Me A Coffee" height="41" width="174">
+</a>
+
+<small>(The joy I get from a free latte is incredible)</small> 
