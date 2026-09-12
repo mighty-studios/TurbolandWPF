@@ -86,6 +86,7 @@
             <MenuItem Header="_Help">
                 <MenuItem Header="_Contents"/>
                 <MenuItem Header="_About..." Command="{x:Static local:IdeCommands.Help}"/>
+                <MenuItem Header="About as _floating window..." Click="OnAboutFloating"/>
             </MenuItem>
         </Menu>
 

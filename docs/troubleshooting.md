@@ -162,7 +162,16 @@ bar stay inside the host. If a dialog appears missing, it is probably shaded
 
 By design. Host modality is soft: input to the content beneath is swallowed, but the
 main window stays readable and `Show` does not block. Use the `Closed` event or check
-`DialogResult`.
+`DialogResult`. If you need a real blocking modal - or the content behind the dialog is
+a WebView2 or other HWND-backed control the overlay cannot sort against - use
+`TurbolandFloatingDialog` and its `ShowDialog(owner)`.
+
+## A dialog is drawn behind a WebView2 (or other hosted content)
+
+In-client dialogs are drawn by WPF inside the main window; a WebView2, `D3DImage` or any
+airspace-sensitive host renders in its own HWND on top of everything WPF composes. No
+z-index fixes this. Show a `TurbolandFloatingDialog` instead: it is a separate window,
+and setting its `Owner` makes the OS keep it above the main window.
 
 ## Snap Layouts does not appear over the zoom box
 

@@ -18,8 +18,8 @@ override one.
 
 **[Controls](controls.md)**
 The stock controls that are themed automatically, and the additions the theme provides:
-`TurbolandWindow`, `TurbolandDialog` / `TurbolandDialogHost`, `StatusBarHint`, `CellSize`,
-`AcceleratorText`, `GlyphFill`, `DialogGeometry`.
+`TurbolandWindow`, `TurbolandDialog` / `TurbolandDialogHost`, `TurbolandFloatingDialog`,
+`StatusBarHint`, `CellSize`, `AcceleratorText`, `GlyphFill`, `DialogGeometry`.
 
 **[Layout on the character grid](character-grid.md)**
 The two layout rules that matter: size in cells, and reserve space for chrome that

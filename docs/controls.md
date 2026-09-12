@@ -84,6 +84,11 @@ Turbo Vision did, and what the hard one-cell shadow requires. `TurbolandWindow` 
 `AllowsTransparency="False"` to keep native resize and Snap behavior, and that means
 nothing can paint outside the window rectangle.
 
+If the content behind the dialog is a WebView2, a `D3DImage` or anything else with its
+own HWND, an in-client overlay cannot sort against it. Use
+[`TurbolandFloatingDialog`](#turbolandfloatingdialog) instead: a real window whose owner
+relationship resolves the sorting for you.
+
 ### Hosting
 
 Drop a host over your content. It is invisible and click-through until a dialog opens:
@@ -167,6 +172,58 @@ if (existing is not null)
 else
     Dialogs.Show(new PreferencesDialog());
 ```
+
+---
+
+## `TurbolandFloatingDialog`
+
+A **true top-level dialog window** in the same visual style - gray face, double-line
+frame, close box, hard shadow - but with its own HWND. Use it instead of the in-client
+`TurbolandDialog` when the content behind the dialog is a WebView2, a `D3DImage` or any
+other airspace-sensitive control: an owned window sorts above its owner by OS rule,
+which no in-window overlay can do.
+
+```csharp
+var dialog = new TurbolandFloatingDialog { Title = "Confirm" };
+dialog.Content = new TextBlock { Text = "Save changes?" };
+
+dialog.ShowDialog(this);   // modal, owned, centred on the owner
+```
+
+`ShowDialog(Window)` sets `Owner` for you; for a modeless dialog set `Owner` and call
+`Show()`. An owned window always stays above its owner, so z-order needs no management,
+and `ShowDialog` gives **real** modality - the call blocks and returns the dialog
+result, unlike the host's soft modality.
+
+The shadow is the artistic payoff of the transparent window:
+`WindowStyle=None` + `AllowsTransparency=True` + a transparent `Background`, with the
+one-cell hard shadow painted as ordinary content in the margin the face reserves to its
+right and bottom. The main window avoids transparency to keep native resize and Snap
+Layouts; a dialog has neither, so it can afford the look.
+
+The class sets the transparency invariants, `ResizeMode.NoResize`, `ShowInTaskbar=False`,
+`SizeToContent=WidthAndHeight` and `WindowStartupLocation=CenterOwner` itself. Do not
+set `WindowStyle`, `AllowsTransparency` or the text-rendering options - like
+`TurbolandWindow` it assigns its own style, so `TurbolandTheme.ApplyTo` is not needed.
+
+| Gesture / key | Action |
+|---|---|
+| Drag the title bar | Move (native) |
+| `Ctrl+F5`, then arrow keys | Move mode, quantised to whole cells; `Enter` commits, `Esc` reverts |
+| `Esc` | Invokes the `IsCancel` button; closes the dialog if there is none |
+| `Enter` | Default button (WPF's own, since this dialog is a real focus-scope root) |
+
+| Member | Purpose |
+|---|---|
+| `Title` | Caption drawn on the top frame line (the `Window.Title` property) |
+| `ShowDialog(Window owner)` | Sets `Owner`, shows modally, returns the result |
+| `Close(bool? result)` | Sets `DialogResult` when modal, skips it silently when modeless |
+| `IsMoveMode`, `BeginMove()`, `EndMove(bool)` | Keyboard move mode |
+| `FocusFirstControl()` | Moves focus into the content |
+| `StyleKey` | `Turboland.Style.TurbolandFloatingDialog` |
+
+Subclass it for anything reusable - the SampleApp's `FloatingMessageDialog` is a
+`TurbolandDialog`-shaped message box built exactly this way.
 
 ---
 

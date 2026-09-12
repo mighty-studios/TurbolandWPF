@@ -166,6 +166,8 @@ application is most likely to want:
 | `Turboland.Size.ChromeInset` | `1,1,9,7` | Space a clipping container must reserve |
 | `Turboland.Size.FocusBorder` | `1` | Focus ring thickness |
 | `Turboland.Size.FocusRingOffset` | `-1` | Equal and opposite to the thickness |
+| `Turboland.Size.FloatingDialogFaceMargin` | `0,0,18,16` | Shadow room reserved by a floating dialog's face |
+| `Turboland.Size.FloatingDialogShadowMargin` | `18,16,0,0` | The same vector pushing the shadow out to meet it |
 
 `ChromeInset` is asymmetric on purpose. See
 [Layout on the character grid](character-grid.md).

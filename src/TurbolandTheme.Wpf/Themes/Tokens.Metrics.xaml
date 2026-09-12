@@ -131,6 +131,14 @@
          paint outside the dialog's own bounds instead of shrinking it. Asymmetric
          because the cell is 9x16, so two cells right is 18 and one row down is 16. -->
     <Thickness x:Key="Turboland.Size.DialogShadowOffset">18,16,-18,-16</Thickness>
+    <!-- The floating dialog's shadow lives INSIDE the window: the HWND is transparent,
+         so the shadow is content rather than overhang. The face reserves the shadow's
+         room with these two margins, which are the same 2-cell/1-row vector split
+         between them: the face is pulled in from the right and bottom, the shadow is
+         pushed out by the same amount, so both land on rectangles of identical size
+         offset by exactly the shadow vector. -->
+    <Thickness x:Key="Turboland.Size.FloatingDialogFaceMargin">0,0,18,16</Thickness>
+    <Thickness x:Key="Turboland.Size.FloatingDialogShadowMargin">18,16,0,0</Thickness>
     <!-- Pressed: the face slides one pixel down-right into its own shadow. Equal and
          opposite values, so the face keeps its size and the button keeps its layout
          slot; a pressed button must not reflow the panel around it. -->

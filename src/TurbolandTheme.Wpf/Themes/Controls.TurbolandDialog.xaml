@@ -219,4 +219,148 @@
         </Setter>
     </Style>
 
+    <!-- ============================================================
+         TURBOLAND FLOATING DIALOG
+         A true top-level dialog window: its own HWND, owned by the main
+         window for z-order and modality, drawn with the same face,
+         double-line frame, close box and hard shadow as the in-client
+         TurbolandDialog above.
+
+         The difference is where the shadow lives. The in-client dialog
+         paints its shadow OUTSIDE its bounds with a negative margin;
+         this window is transparent (WindowStyle=None +
+         AllowsTransparency=True, set by the class itself), so the
+         shadow is ordinary content inside the window: the face reserves
+         two cells and one row on the right and bottom
+         (FloatingDialogFaceMargin) and the shadow is pushed out by the
+         same vector (FloatingDialogShadowMargin), landing both on
+         equal-size rectangles offset by exactly the shadow vector.
+
+         The window Background must stay Transparent or the shadow room
+         fills with an opaque rectangle, so the face takes its gray
+         directly from the token rather than from TemplateBinding.
+         ============================================================ -->
+    <Style x:Key="Turboland.Style.TurbolandFloatingDialog" TargetType="ctl:TurbolandFloatingDialog">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Foreground" Value="{DynamicResource Turboland.Brush.WindowForeground}"/>
+        <Setter Property="FontFamily" Value="{DynamicResource Turboland.Font.Primary}"/>
+        <Setter Property="FontSize" Value="{DynamicResource Turboland.Font.Size.Primary}"/>
+        <Setter Property="TextOptions.TextFormattingMode" Value="Display"/>
+        <Setter Property="TextOptions.TextRenderingMode" Value="Grayscale"/>
+        <Setter Property="UseLayoutRounding" Value="True"/>
+        <Setter Property="SnapsToDevicePixels" Value="True"/>
+
+        <!-- Keyboard move mode quantises by the live cell, same as the in-client
+             dialog, so the gesture moves the same distance at every scale. -->
+        <Setter Property="CellWidth" Value="{DynamicResource Turboland.Metric.CellWidth}"/>
+        <Setter Property="CellHeight" Value="{DynamicResource Turboland.Metric.CellHeight}"/>
+
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ctl:TurbolandFloatingDialog">
+                    <Grid>
+                        <!-- Declared first so it sits behind the face. -->
+                        <Border x:Name="shadow"
+                                Background="{DynamicResource Turboland.Brush.Shadow}"
+                                Margin="{DynamicResource Turboland.Size.FloatingDialogShadowMargin}"
+                                SnapsToDevicePixels="True"/>
+
+                        <Border x:Name="face"
+                                Background="{DynamicResource Turboland.Brush.WindowBackground}"
+                                Margin="{DynamicResource Turboland.Size.FloatingDialogFaceMargin}"
+                                SnapsToDevicePixels="True">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+
+                                <!-- Top frame line: identical layout to the in-client
+                                     dialog - corner, close box, rule, title, rule,
+                                     corner, with the star columns keeping the title
+                                     centred however wide the dialog gets. -->
+                                <Grid x:Name="PART_TitleBar" Grid.Row="0" Background="Transparent">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <ctl:GlyphFill Grid.Column="0" Glyph="&#x2554;"
+                                                   Style="{StaticResource Turboland.Style.DialogFrameGlyph}"/>
+
+                                    <Button x:Name="PART_CloseBox" Grid.Column="1"
+                                            Style="{StaticResource Turboland.Style.DialogCloseBox}"/>
+
+                                    <ctl:GlyphFill Grid.Column="2" Glyph="&#x2550;"
+                                                   Style="{StaticResource Turboland.Style.DialogFrameGlyph}"/>
+
+                                    <TextBlock x:Name="title" Grid.Column="3"
+                                               Text="{TemplateBinding Title}"
+                                               Padding="{DynamicResource Turboland.Size.CellPadding}"
+                                               Style="{StaticResource Turboland.Style.DialogFrameText}"/>
+
+                                    <ctl:GlyphFill Grid.Column="4" Glyph="&#x2550;"
+                                                   Style="{StaticResource Turboland.Style.DialogFrameGlyph}"/>
+
+                                    <ctl:GlyphFill Grid.Column="5" Glyph="&#x2557;"
+                                                   Style="{StaticResource Turboland.Style.DialogFrameGlyph}"/>
+                                </Grid>
+
+                                <Grid x:Name="body" Grid.Row="1">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <ctl:GlyphFill Grid.Column="0" Glyph="&#x2551;" Orientation="Vertical"
+                                                   Style="{StaticResource Turboland.Style.DialogFrameGlyph}"/>
+
+                                    <ContentPresenter Grid.Column="1"
+                                                      Margin="{DynamicResource Turboland.Size.GroupBoxPadding}"/>
+
+                                    <ctl:GlyphFill Grid.Column="2" Glyph="&#x2551;" Orientation="Vertical"
+                                                   Style="{StaticResource Turboland.Style.DialogFrameGlyph}"/>
+                                </Grid>
+
+                                <Grid Grid.Row="2">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <ctl:GlyphFill Grid.Column="0" Glyph="&#x255A;"
+                                                   Style="{StaticResource Turboland.Style.DialogFrameGlyph}"/>
+
+                                    <ctl:GlyphFill Grid.Column="1" Glyph="&#x2550;"
+                                                   Style="{StaticResource Turboland.Style.DialogFrameGlyph}"/>
+
+                                    <ctl:GlyphFill Grid.Column="2" Glyph="&#x255D;"
+                                                   Style="{StaticResource Turboland.Style.DialogFrameGlyph}"/>
+                                </Grid>
+                            </Grid>
+                        </Border>
+                    </Grid>
+
+                    <ControlTemplate.Triggers>
+                        <!-- Keyboard move mode has to be visible, or the arrow keys
+                             silently change meaning; the title inverts to signal it. -->
+                        <Trigger Property="IsMoveMode" Value="True">
+                            <Setter TargetName="title" Property="Background"
+                                    Value="{DynamicResource Turboland.Brush.FrameActive}"/>
+                            <Setter TargetName="title" Property="Foreground"
+                                    Value="{DynamicResource Turboland.Brush.WindowForeground}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
 </ResourceDictionary>

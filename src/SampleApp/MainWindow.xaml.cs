@@ -104,6 +104,20 @@ public partial class MainWindow : TurbolandWindow
     private void OnExit(object sender, ExecutedRoutedEventArgs e) => Close();
 
     /// <summary>
+    /// Shows the same About message as a true dialog window instead of an in-client one.
+    /// Owner is set by <c>ShowDialog(Window)</c>, so the OS keeps it above the shell -
+    /// the sorting behavior you need when the content behind it is a WebView2 or other
+    /// airspace-sensitive control the in-client host cannot float over.
+    /// </summary>
+    private void OnAboutFloating(object sender, RoutedEventArgs e) =>
+        new FloatingMessageDialog(
+            "About",
+            "Turboland theme for WPF." + Environment.NewLine +
+            "A TurbolandFloatingDialog: its own HWND, owned by this window," + Environment.NewLine +
+            "with the hard shadow drawn inside the transparent window surface.")
+            .ShowDialog(this);
+
+    /// <summary>
     /// Shows a plain message dialog on the host. Note this is not a modal call: the
     /// host's modality is soft, so the main window stays readable behind it -
     /// which is the point, since the dialog is usually asking about text on screen.

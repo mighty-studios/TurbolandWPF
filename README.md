@@ -24,6 +24,9 @@ The theme re-templates stock WPF controls. It does not replace them.
   layout rounding applied for you.
 - **Native window behavior** - the frame is drawn in the client area, but resize,
   maximise, Snap Layouts and the taskbar all still work.
+- **Two dialog shapes** - `TurbolandDialog` floats inside the main window like a real
+  text-mode dialog, and `TurbolandFloatingDialog` is a true owned window whose shadow
+  rides a transparent surface - the one to use over WebView2 or other airspace content.
 - **No hardcoded values** - the theme is driven entirely by named design tokens you
   can read, reuse or override.
 
