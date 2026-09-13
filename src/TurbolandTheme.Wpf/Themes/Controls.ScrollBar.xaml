@@ -115,6 +115,7 @@
                           Style="{StaticResource TurbolandScrollArrow}"/>
             <Track x:Name="PART_Track"
                    Grid.Row="1"
+                   IsDirectionReversed="True"
                    IsEnabled="{TemplateBinding IsMouseOver}">
                 <Track.DecreaseRepeatButton>
                     <RepeatButton Command="{x:Static ScrollBar.PageUpCommand}" Style="{StaticResource TurbolandScrollPageButton}"/>
