@@ -32,10 +32,12 @@
                 <MenuItem Header="_Open..." Command="{x:Static local:IdeCommands.Open}"/>
                 <MenuItem Header="_New"/>
                 <MenuItem Header="_Save" Command="{x:Static local:IdeCommands.Save}"/>
-                <MenuItem Header="Save _as..."/>
+                <!-- Disabled until a document exists, the way the real IDE grayed
+                     these out on an empty editor. -->
+                <MenuItem Header="Save _as..." IsEnabled="False"/>
                 <Separator/>
                 <MenuItem Header="_Change dir..."/>
-                <MenuItem Header="_Print"/>
+                <MenuItem Header="_Print" IsEnabled="False"/>
                 <MenuItem Header="_DOS shell"/>
                 <Separator/>
                 <MenuItem Header="E_xit" Command="{x:Static local:IdeCommands.Exit}"/>
@@ -156,6 +158,9 @@
                         <ListBoxItem Content="Result: 49"/>
                         <ListBoxItem Content="Res: 49"/>
                         <ListBoxItem Content="Sqr(Index): 49"/>
+                        <!-- A watch whose expression cannot be evaluated while the
+                             program is not running: the row dims in place. -->
+                        <ListBoxItem Content="Remote: not connected" IsEnabled="False"/>
                     </ListBox>
                 </GroupBox>
             </Grid>

@@ -110,6 +110,15 @@ public sealed class ColorTokens
     /// <summary>Push-button hard shadow strip. VGA 0 (Black).</summary>
     public VgaColor ButtonShadow => VgaPalette.Black;
 
+    /// <summary>
+    /// Face of a disabled push button. VGA 2 (Green) in Authentic mode - the same
+    /// green as an enabled button, so a disabled button still reads as a button and
+    /// only its label dims; Accessible mode overrides the resource to VGA 7 (Light
+    /// Gray) because black is the only ink reaching AA on green and is already the
+    /// enabled label. Mirrors <c>Turboland.Brush.ButtonDisabledFace</c>.
+    /// </summary>
+    public VgaColor ButtonDisabledFace => VgaPalette.Green;
+
     /// <summary>Code editor background. VGA 1 (Blue), not black.</summary>
     public VgaColor EditorBackground => VgaPalette.Blue;
 

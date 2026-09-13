@@ -50,6 +50,18 @@
                             <Setter TargetName="face" Property="Background" Value="{DynamicResource Turboland.Brush.ControlSelected}"/>
                             <Setter TargetName="arrow" Property="Foreground" Value="{DynamicResource Turboland.Brush.ControlSelectedForeground}"/>
                         </Trigger>
+                        <!-- disabled: the arrow dims in place. A ScrollViewer disables
+                             its bars when the content fits, so this is the state a user
+                             sees most often; the face stays gray because the track is
+                             gray and a dimmed face would vanish into it. Only the glyph
+                             drops to DisabledForeground, which is muted against the face
+                             without erasing the control.
+                             The Thumb deliberately has no such trigger: the Track's
+                             IsEnabled is bound to IsMouseOver, so a thumb-level dim
+                             would flash on and off with the pointer. -->
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="arrow" Property="Foreground" Value="{DynamicResource Turboland.Brush.DisabledForeground}"/>
+                        </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>

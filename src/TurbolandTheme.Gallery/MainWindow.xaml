@@ -3,9 +3,10 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:ctl="clr-namespace:TurbolandTheme.Wpf.Controls;assembly=TurbolandTheme.Wpf"
         Title="Turboland Theme Gallery"
-        ctl:CellSize.Columns="98" ctl:CellSize.Rows="44">
+        ctl:CellSize.Columns="98" ctl:CellSize.Rows="56">
     <!-- The window is sized in cells, not pixels, so it still fits its content at
-         2x. 98x44 cells is simply what holds the two columns without scrolling at 1x. -->
+         2x. 98x56 cells is simply what holds the two columns - each shown in both
+         its enabled and its disabled depictions - without scrolling at 1x. -->
     <DockPanel>
 
         <Menu DockPanel.Dock="Top">
@@ -17,11 +18,12 @@
                 <MenuItem Header="E_xit" InputGestureText="Alt+X" Click="OnExit"/>
             </MenuItem>
             <MenuItem Header="_Edit">
-                <MenuItem Header="_Undo" InputGestureText="Alt+BkSp"/>
+                <MenuItem Header="_Undo" InputGestureText="Alt+BkSp" IsEnabled="False"/>
                 <Separator/>
                 <MenuItem Header="Cu_t" InputGestureText="Shift+Del"/>
                 <MenuItem Header="_Copy" InputGestureText="Ctrl+Ins"/>
-                <MenuItem Header="_Paste" InputGestureText="Shift+Ins"/>
+                <!-- Disabled the way the real IDE did it: nothing on the clipboard. -->
+                <MenuItem Header="_Paste" InputGestureText="Shift+Ins" IsEnabled="False"/>
             </MenuItem>
             <MenuItem Header="_Options">
                 <MenuItem Header="_Authentic mode" IsCheckable="True" IsChecked="True"/>
@@ -45,6 +47,9 @@
             <ctl:StatusBarHint Key="F3" Label="Open"/>
             <Separator/>
             <ctl:StatusBarHint Key="F10" Label="Menu"/>
+            <Separator/>
+            <!-- A disabled hint: both the red key and the label drop to the dim ink. -->
+            <ctl:StatusBarHint Key="F8" Label="Zoom" IsEnabled="False"/>
             <Separator/>
             <ctl:StatusBarHint Key="Alt+X" Label="Exit"/>
         </StatusBar>
@@ -92,13 +97,19 @@
                             <TextBlock Text="Text entry"/>
                             <TextBox Text="C:\TP\BIN\TURBO.EXE"/>
                             <TextBox Text="Read only" IsEnabled="False"/>
-                            <PasswordBox Password="turbo" Margin="{DynamicResource Turboland.Size.SectionMargin}"/>
+                            <PasswordBox Password="secret"/>
+                            <PasswordBox Password="secret" IsEnabled="False"
+                                     Margin="{DynamicResource Turboland.Size.SectionMargin}"/>
 
                             <TextBlock Text="Combo box"/>
-                            <ComboBox SelectedIndex="0" Margin="{DynamicResource Turboland.Size.SectionMargin}">
+                            <ComboBox SelectedIndex="0">
                                 <ComboBoxItem Content="8086 / 8088"/>
                                 <ComboBoxItem Content="80286"/>
                                 <ComboBoxItem Content="80386"/>
+                            </ComboBox>
+                            <ComboBox IsEnabled="False" SelectedIndex="0"
+                                      Margin="{DynamicResource Turboland.Size.SectionMargin}">
+                                <ComboBoxItem Content="Coprocessor absent"/>
                             </ComboBox>
 
                             <TextBlock Text="Scroll bar"/>
@@ -107,6 +118,12 @@
                                  factor. -->
                             <ScrollBar Orientation="Horizontal" ctl:CellSize.Rows="1"
                                        Minimum="0" Maximum="100" Value="35" ViewportSize="25"/>
+                            <!-- Disabled the way a ScrollViewer disables a bar whose
+                                 content already fits: the arrows drop to the dim ink. -->
+                            <ScrollBar Orientation="Horizontal" ctl:CellSize.Rows="1"
+                                       IsEnabled="False"
+                                       Minimum="0" Maximum="100" Value="35"
+                                       Margin="{DynamicResource Turboland.Size.SectionMargin}"/>
                         </StackPanel>
 
                         <StackPanel Grid.Column="1">
@@ -120,11 +137,19 @@
                                 <ListBoxItem Content="program"/>
                                 <ListBoxItem Content="unit"/>
                                 <ListBoxItem Content="interface"/>
-                                <ListBoxItem Content="implementation"/>
+                                <!-- A disabled row inside an enabled list: the item
+                                     itself dims, the list keeps its cyan face. -->
+                                <ListBoxItem Content="implementation" IsEnabled="False"/>
                                 <ListBoxItem Content="procedure"/>
                                 <ListBoxItem Content="function"/>
                                 <ListBoxItem Content="begin"/>
                                 <ListBoxItem Content="end"/>
+                            </ListBox>
+                            <!-- The whole list disabled: the field drops to the
+                                 surface color and keeps only its dim outline. -->
+                            <ListBox ctl:CellSize.Rows="3" IsEnabled="False" Margin="{DynamicResource Turboland.Size.SectionMargin}">
+                                <ListBoxItem Content="INLINE"/>
+                                <ListBoxItem Content="OVERLAY"/>
                             </ListBox>
 
                             <TextBlock Text="Tree view"/>
@@ -134,7 +159,14 @@
                                     <TreeViewItem Header="type" IsExpanded="True">
                                         <TreeViewItem Header="TRecord"/>
                                     </TreeViewItem>
-                                    <TreeViewItem Header="var"/>
+                                    <!-- A disabled node: label and its [+]/[-] marker
+                                         both drop to the dim ink. -->
+                                    <TreeViewItem Header="var" IsEnabled="False"/>
+                                </TreeViewItem>
+                            </TreeView>
+                            <TreeView ctl:CellSize.Rows="3" IsEnabled="False" Margin="{DynamicResource Turboland.Size.SectionMargin}">
+                                <TreeViewItem Header="locked project" IsExpanded="True">
+                                    <TreeViewItem Header="MAIN.PAS"/>
                                 </TreeViewItem>
                             </TreeView>
 
@@ -144,6 +176,12 @@
                                     <CheckBox Content="Range checking"/>
                                     <CheckBox Content="Stack checking" IsChecked="True"/>
                                 </StackPanel>
+                            </GroupBox>
+                            <!-- A disabled group: the caption dims and everything
+                                 inside inherits the state, so the whole block reads
+                                 as unavailable. -->
+                            <GroupBox Header="Linker" IsEnabled="False" Margin="{DynamicResource Turboland.Size.SectionMargin}">
+                                <CheckBox Content="Map file" IsChecked="True"/>
                             </GroupBox>
 
                             <TextBlock Text="Tab control"/>
@@ -158,6 +196,9 @@
                                     <TextBlock Text="Include debug information"/>
                                 </TabItem>
                                 <TabItem Header="Links"/>
+                                <!-- A disabled tab: the label dims in place, the tab
+                                     keeps its shape so the strip still reads whole. -->
+                                <TabItem Header="History" IsEnabled="False"/>
                             </TabControl>
                         </StackPanel>
                     </Grid>

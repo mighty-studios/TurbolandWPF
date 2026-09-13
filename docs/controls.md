@@ -23,6 +23,16 @@ as you always have - no attached properties, no wrapper types, no markup changes
 Access keys still work the standard way: `Content="_OK"` declares `Alt+O` and renders the
 `O` in the accelerator color.
 
+Every one of these controls renders both its enabled and its disabled depiction from the
+same templates: set `IsEnabled="False"` (on the control or, for item controls, on an
+individual item) and nothing else. Disabled ink is `Turboland.Brush.DisabledForeground`;
+a disabled push button swaps its face to `Turboland.Brush.ButtonDisabledFace`; disabled
+fields, lists and buttons keep a dim outline so they still read as their control type;
+nested parts that fix their own color - the combo drop arrow, the tree expander marker,
+the status-bar hint key - dim with the control too. A disabled accelerator never keeps
+its hot-key color: a key that cannot be pressed is not advertised. The Gallery shows an
+enabled and a disabled instance of every control side by side.
+
 ---
 
 ## `TurbolandWindow`

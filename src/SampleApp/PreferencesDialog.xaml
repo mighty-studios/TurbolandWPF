@@ -22,7 +22,9 @@
                 <GroupBox Header="Screen Size">
                     <StackPanel>
                         <RadioButton Content="_25 lines" GroupName="Screen" IsChecked="True"/>
-                        <RadioButton Content="_43/50 lines" GroupName="Screen"/>
+                        <!-- Disabled the way the real IDE did it: the current display
+                             adapter cannot do 43/50 lines. -->
+                        <RadioButton Content="_43/50 lines" GroupName="Screen" IsEnabled="False"/>
                     </StackPanel>
                 </GroupBox>
                 <GroupBox Header="Source Tracking">
@@ -76,6 +78,10 @@
             <Button Content="OK" IsDefault="True" Click="OnOk"
                     Margin="{DynamicResource Turboland.Size.ButtonStripMargin}"/>
             <Button Content="Cancel" IsCancel="True" Click="OnCancel"
+                    Margin="{DynamicResource Turboland.Size.ButtonStripMargin}"/>
+            <!-- Disabled until something actually changes: a button the user cannot
+                 press never wears the enabled green. -->
+            <Button x:Name="Apply" Content="Apply" IsEnabled="False"
                     Margin="{DynamicResource Turboland.Size.ButtonStripMargin}"/>
             <Button Content="Help" Click="OnHelp"/>
         </StackPanel>

@@ -61,6 +61,13 @@
                     <Border Background="Transparent" Padding="{DynamicResource Turboland.Size.CellPadding}">
                         <ContentPresenter VerticalAlignment="Center"/>
                     </Border>
+                    <ControlTemplate.Triggers>
+                        <!-- Same treatment as the hint: a disabled segment dims its
+                             text rather than vanishing. -->
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Foreground" Value="{DynamicResource Turboland.Brush.DisabledForeground}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
@@ -83,13 +90,23 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ctl:StatusBarHint">
-                    <TextBlock VerticalAlignment="Center"
+                    <TextBlock x:Name="body"
+                               VerticalAlignment="Center"
                                Foreground="{TemplateBinding Foreground}"
                                SnapsToDevicePixels="True">
-                        <Run Text="{Binding Key, RelativeSource={RelativeSource TemplatedParent}, Mode=OneWay}"
+                        <Run x:Name="key" Text="{Binding Key, RelativeSource={RelativeSource TemplatedParent}, Mode=OneWay}"
                              Foreground="{DynamicResource Turboland.Brush.StatusBarAccelerator}"/><Run Text=" "/><Run
                              Text="{Binding Label, RelativeSource={RelativeSource TemplatedParent}, Mode=OneWay}"/>
                     </TextBlock>
+                    <ControlTemplate.Triggers>
+                        <!-- disabled: both segments dim. The key fixes its own ink, so
+                             it does not follow the label down and has to be named and
+                             recolored alongside it. -->
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="body" Property="Foreground" Value="{DynamicResource Turboland.Brush.DisabledForeground}"/>
+                            <Setter TargetName="key" Property="Foreground" Value="{DynamicResource Turboland.Brush.DisabledForeground}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

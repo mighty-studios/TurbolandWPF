@@ -91,6 +91,12 @@
                                         <Trigger Property="IsMouseOver" Value="True">
                                             <Setter TargetName="marker" Property="Foreground" Value="{DynamicResource Turboland.Brush.ControlSelectedForeground}"/>
                                         </Trigger>
+                                        <!-- disabled: the marker fixes its own color, so
+                                             it does not follow the item's dimmed label
+                                             and has to be dimmed here as well. -->
+                                        <Trigger Property="IsEnabled" Value="False">
+                                            <Setter TargetName="marker" Property="Foreground" Value="{DynamicResource Turboland.Brush.DisabledForeground}"/>
+                                        </Trigger>
                                     </ControlTemplate.Triggers>
                                 </ControlTemplate>
                             </ToggleButton.Template>

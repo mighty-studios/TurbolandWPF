@@ -196,8 +196,14 @@
                 <Setter Property="Background" Value="Transparent"/>
                 <Setter Property="Foreground" Value="{DynamicResource Turboland.Brush.MenuForeground}"/>
             </Trigger>
-            <!-- A disabled item must not advertise a hot key that does nothing. -->
+            <!-- A disabled item must not advertise a hot key that does nothing.
+                 The Foreground setter has to live here rather than only in the
+                 templates: a style trigger outranks a template trigger, so the
+                 Role setters above would otherwise keep a disabled dropdown item
+                 black. -->
             <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="Foreground"
+                        Value="{DynamicResource Turboland.Brush.DisabledForeground}"/>
                 <Setter Property="c:AcceleratorText.AcceleratorBrush"
                         Value="{DynamicResource Turboland.Brush.DisabledForeground}"/>
             </Trigger>

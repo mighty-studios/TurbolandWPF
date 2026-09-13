@@ -81,6 +81,14 @@
                                             <Setter TargetName="btnFace" Property="Background" Value="{DynamicResource Turboland.Brush.ControlSelected}"/>
                                             <Setter TargetName="arrow" Property="Foreground" Value="{DynamicResource Turboland.Brush.ControlSelectedForeground}"/>
                                         </Trigger>
+                                        <!-- disabled: the outer template recolors the
+                                             field, but this button carries its own face
+                                             and glyph, so it dims here too. A disabled
+                                             element is not hit-tested, so the hover
+                                             trigger above can never compete. -->
+                                        <Trigger Property="IsEnabled" Value="False">
+                                            <Setter TargetName="arrow" Property="Foreground" Value="{DynamicResource Turboland.Brush.DisabledForeground}"/>
+                                        </Trigger>
                                     </ControlTemplate.Triggers>
                                 </ControlTemplate>
                             </ToggleButton.Template>
