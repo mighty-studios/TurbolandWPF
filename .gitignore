@@ -290,6 +290,27 @@ __pycache__/
 
 # local test artifacts
 /tests/TurbolandTheme.Tests.VisualRegression/baselines/_failed/
-.github
-.copilot
-.gopilot
+
+# prevent contributors from submitting their local dev tools
+.copilot/
+.gopilot/
+CLAUDE.md
+.claude/
+AGENTS.md
+AGENTS.override.md
+codex.md
+.codex/
+GEMINI.md
+.gemini/
+.cursor/
+.cursorrules
+.cursorignore
+.cursorindexingignore
+.github/copilot-instructions.md
+.github/agents/
+.github/instructions/
+.github/plugins/
+.github/prompts/
+.github/scripts/
+.github/skills/
+.agents/
