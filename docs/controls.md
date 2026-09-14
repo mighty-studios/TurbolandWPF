@@ -5,6 +5,16 @@
 These are themed automatically by implicit styles once `Apply` has run. Use them exactly
 as you always have - no attached properties, no wrapper types, no markup changes.
 
+The implicit style **is** the entry point. There is no keyed variant such as
+`TurbolandTabControlStyle`, and asking for one with `DynamicResource` silently yields
+nothing - the control drops back to stock chrome with no error. To reuse a themed style
+as the base of your own, key it off the type:
+
+```xml
+<Style TargetType="TabControl"
+       BasedOn="{StaticResource {x:Type TabControl}}">
+```
+
 | Control | Notes |
 |---|---|
 | `Button` | Green face, hard black shadow, white focus ring painted outside the layout box |
@@ -222,6 +232,12 @@ set `WindowStyle`, `AllowsTransparency` or the text-rendering options - like
 | `Ctrl+F5`, then arrow keys | Move mode, quantised to whole cells; `Enter` commits, `Esc` reverts |
 | `Esc` | Invokes the `IsCancel` button; closes the dialog if there is none |
 | `Enter` | Default button (WPF's own, since this dialog is a real focus-scope root) |
+
+Put `IsCancel` only on a button that actually cancels. WPF answers a click on a cancel
+button by setting `DialogResult=false` itself, so a `Click` handler that calls
+`Close(true)` on the same button is fighting the framework. A confirm-style OK button
+gets `IsDefault` alone; `Esc` still closes both dialog types (via the cancel button if
+there is one, otherwise with `false` / by closing).
 
 | Member | Purpose |
 |---|---|

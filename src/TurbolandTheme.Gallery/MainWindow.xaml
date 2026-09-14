@@ -35,7 +35,7 @@
                 </MenuItem>
             </MenuItem>
             <MenuItem Header="_Help">
-                <MenuItem Header="_About Turboland Theme" InputGestureText="F1"/>
+                <MenuItem Header="_About Turboland Theme" InputGestureText="F1" Click="OnAbout"/>
             </MenuItem>
         </Menu>
 
@@ -186,19 +186,38 @@
 
                             <TextBlock Text="Tab control"/>
                             <!-- No fixed height: the tab strip is off-grid, so any whole-control row
-                                 count would be a fiction. It sizes to content; the page's inset is the
-                                 template's Padding. -->
+                                 count would be a fiction. It sizes to content. The page carries no
+                                 inset by default (Padding is zero, so the WindowBackground face
+                                 cannot show as gray side bars); each tab supplies its own margin. -->
                             <TabControl>
-                                <TabItem Header="Code">
-                                    <TextBlock Text="Generate 80286 instructions"/>
+                                <TabItem Header="_Code">
+                                    <StackPanel Margin="{DynamicResource Turboland.Size.CellPadding}">
+                                        <CheckBox Content="Generate 80286 instructions" IsChecked="True"/>
+                                        <CheckBox Content="Overlay program"/>
+                                    </StackPanel>
                                 </TabItem>
-                                <TabItem Header="Debug">
-                                    <TextBlock Text="Include debug information"/>
+                                <TabItem Header="_Debug">
+                                    <StackPanel Margin="{DynamicResource Turboland.Size.CellPadding}">
+                                        <CheckBox Content="Include debug information" IsChecked="True"/>
+                                        <RadioButton Content="Borland format" GroupName="DbgFormat" IsChecked="True"/>
+                                        <RadioButton Content="Standard format" GroupName="DbgFormat"/>
+                                    </StackPanel>
                                 </TabItem>
-                                <TabItem Header="Links"/>
+                                <TabItem Header="Lin_k">
+                                    <!-- An empty tab is legal: the page renders blank. -->
+                                </TabItem>
                                 <!-- A disabled tab: the label dims in place, the tab
                                      keeps its shape so the strip still reads whole. -->
                                 <TabItem Header="History" IsEnabled="False"/>
+                            </TabControl>
+
+                            <!-- The whole control disabled: the selected page dims with
+                                 it, so the tab body reads as unavailable. -->
+                            <TabControl IsEnabled="False" Margin="{DynamicResource Turboland.Size.SectionMargin}">
+                                <TabItem Header="Locked">
+                                    <TextBlock Text="Project is read-only"
+                                               Margin="{DynamicResource Turboland.Size.CellPadding}"/>
+                                </TabItem>
                             </TabControl>
                         </StackPanel>
                     </Grid>

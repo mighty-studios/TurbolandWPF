@@ -13,7 +13,10 @@
         <Setter Property="Background" Value="{DynamicResource Turboland.Brush.WindowBackground}"/>
         <Setter Property="Foreground" Value="{DynamicResource Turboland.Brush.WindowForeground}"/>
         <Setter Property="BorderBrush" Value="{DynamicResource Turboland.Brush.ControlShadow}"/>
-        <Setter Property="Padding" Value="{DynamicResource Turboland.Size.CellPadding}"/>
+        <!-- Zero, not CellPadding: the page paints WindowBackground, so any horizontal
+             padding shows as gray bars beside the content. Apps that want an inset set
+             Padding themselves. -->
+        <Setter Property="Padding" Value="0"/>
         <Setter Property="FontFamily" Value="{DynamicResource Turboland.Font.Primary}"/>
         <Setter Property="FontSize" Value="{DynamicResource Turboland.Font.Size.Primary}"/>
         <Setter Property="TextOptions.TextFormattingMode" Value="Display"/>

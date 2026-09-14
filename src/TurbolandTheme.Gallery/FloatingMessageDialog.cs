@@ -2,13 +2,13 @@ using System.Windows;
 using System.Windows.Controls;
 using TurbolandTheme.Wpf.Controls;
 
-namespace SampleApp;
+namespace TurbolandTheme.Gallery;
 
 /// <summary>
-/// The same message dialog as <see cref="MessageDialog"/>, but as a true top-level
-/// <see cref="TurbolandFloatingDialog"/> window: its own HWND, owned by the main window,
-/// with the hard shadow drawn inside the transparent window surface. Use this shape when
-/// the content behind the dialog is a WebView2 or any other airspace-sensitive control.
+/// A message box as a true top-level <see cref="TurbolandFloatingDialog"/> window:
+/// its own HWND, owned by the main window, with the hard shadow drawn inside the
+/// transparent window surface. The same shape the SampleApp uses for its floating
+/// About box.
 /// </summary>
 internal sealed class FloatingMessageDialog : TurbolandFloatingDialog
 {
@@ -36,7 +36,7 @@ internal sealed class FloatingMessageDialog : TurbolandFloatingDialog
 
         // The gap between the message and the button is one character row, taken from
         // the metric tokens so it tracks the active scale factor. Deferred to Loaded
-        // for the same reason MessageDialog defers it.
+        // because the resource is only reachable once the dialog is on a host.
         Loaded += (_, _) =>
         {
             if (TryFindResource("Turboland.Metric.CellHeight") is double cellHeight)

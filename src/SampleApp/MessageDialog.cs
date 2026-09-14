@@ -16,11 +16,13 @@ internal sealed class MessageDialog : TurbolandDialog
 
         TextBlock text = new() { Text = message };
 
+        // Deliberately not IsCancel: WPF answers a click on a cancel button by setting
+        // DialogResult=false itself, which would fight the Close(true) below. Esc still
+        // works - TurbolandDialog falls back to Close(false) when no cancel button exists.
         Button ok = new()
         {
             Content = "OK",
             IsDefault = true,
-            IsCancel = true,
             HorizontalAlignment = HorizontalAlignment.Center
         };
         ok.Click += (_, _) => Close(true);
