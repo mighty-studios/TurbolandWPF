@@ -124,6 +124,56 @@
                                        IsEnabled="False"
                                        Minimum="0" Maximum="100" Value="35"
                                        Margin="{DynamicResource Turboland.Size.SectionMargin}"/>
+
+                            <TextBlock Text="Scroll bar, app-selected colors"/>
+                            <!-- The two track tokens are what an application overrides to
+                                 recolor its bars: the classic blue + cyan pair of the
+                                 debugger and editor windows. Scoped to this panel to show
+                                 the mechanism; the same keys at application scope would
+                                 restyle every bar in the app. -->
+                            <StackPanel Margin="{DynamicResource Turboland.Size.SectionMargin}">
+                                <StackPanel.Resources>
+                                    <SolidColorBrush x:Key="Turboland.Brush.ScrollTrackBase"
+                                                     Color="{DynamicResource Turboland.Color.Palette.1}"/>
+                                    <SolidColorBrush x:Key="Turboland.Brush.ScrollTrackStipple"
+                                                     Color="{DynamicResource Turboland.Color.Palette.3}"/>
+                                </StackPanel.Resources>
+                                <ScrollBar Orientation="Horizontal" ctl:CellSize.Rows="1"
+                                           Minimum="0" Maximum="100" Value="35" ViewportSize="25"/>
+                            </StackPanel>
+
+                            <TextBlock Text="Tab control"/>
+                            <!-- No fixed height: the tab strip is off-grid, so any whole-control row
+     count would be a fiction. It sizes to content. The page carries no
+     inset by default (Padding is zero, so the WindowBackground face
+     cannot show as gray side bars); each tab supplies its own margin. -->
+                            <TabControl>
+                                <TabItem Header="_Code">
+                                    <StackPanel Margin="{DynamicResource Turboland.Size.CellPadding}">
+                                        <CheckBox Content="Generate 80286 instructions" IsChecked="True"/>
+                                        <CheckBox Content="Overlay program"/>
+                                    </StackPanel>
+                                </TabItem>
+                                <TabItem Header="_Debug">
+                                    <StackPanel Margin="{DynamicResource Turboland.Size.CellPadding}">
+                                        <CheckBox Content="Include debug information" IsChecked="True"/>
+                                        <RadioButton Content="Borland format" GroupName="DbgFormat" IsChecked="True"/>
+                                        <RadioButton Content="Standard format" GroupName="DbgFormat"/>
+                                    </StackPanel>
+                                </TabItem>
+                                <TabItem Header="Lin_k">
+                                    <!-- An empty tab is legal: the page renders blank. -->
+                                </TabItem>
+                                <!-- A disabled tab: the label dims in place, the tab keeps its shape so the strip still reads whole. -->
+                                <TabItem Header="History" IsEnabled="False"/>
+                            </TabControl>
+                            <!-- The whole control disabled: the selected page dims with it, so the tab body reads as unavailable. -->
+                            <TabControl IsEnabled="False" Margin="{DynamicResource Turboland.Size.SectionMargin}">
+                                <TabItem Header="Locked">
+                                    <TextBlock Text="Project is read-only"
+                   Margin="{DynamicResource Turboland.Size.CellPadding}"/>
+                                </TabItem>
+                            </TabControl>
                         </StackPanel>
 
                         <StackPanel Grid.Column="1">
@@ -184,41 +234,7 @@
                                 <CheckBox Content="Map file" IsChecked="True"/>
                             </GroupBox>
 
-                            <TextBlock Text="Tab control"/>
-                            <!-- No fixed height: the tab strip is off-grid, so any whole-control row
-                                 count would be a fiction. It sizes to content. The page carries no
-                                 inset by default (Padding is zero, so the WindowBackground face
-                                 cannot show as gray side bars); each tab supplies its own margin. -->
-                            <TabControl>
-                                <TabItem Header="_Code">
-                                    <StackPanel Margin="{DynamicResource Turboland.Size.CellPadding}">
-                                        <CheckBox Content="Generate 80286 instructions" IsChecked="True"/>
-                                        <CheckBox Content="Overlay program"/>
-                                    </StackPanel>
-                                </TabItem>
-                                <TabItem Header="_Debug">
-                                    <StackPanel Margin="{DynamicResource Turboland.Size.CellPadding}">
-                                        <CheckBox Content="Include debug information" IsChecked="True"/>
-                                        <RadioButton Content="Borland format" GroupName="DbgFormat" IsChecked="True"/>
-                                        <RadioButton Content="Standard format" GroupName="DbgFormat"/>
-                                    </StackPanel>
-                                </TabItem>
-                                <TabItem Header="Lin_k">
-                                    <!-- An empty tab is legal: the page renders blank. -->
-                                </TabItem>
-                                <!-- A disabled tab: the label dims in place, the tab
-                                     keeps its shape so the strip still reads whole. -->
-                                <TabItem Header="History" IsEnabled="False"/>
-                            </TabControl>
-
-                            <!-- The whole control disabled: the selected page dims with
-                                 it, so the tab body reads as unavailable. -->
-                            <TabControl IsEnabled="False" Margin="{DynamicResource Turboland.Size.SectionMargin}">
-                                <TabItem Header="Locked">
-                                    <TextBlock Text="Project is read-only"
-                                               Margin="{DynamicResource Turboland.Size.CellPadding}"/>
-                                </TabItem>
-                            </TabControl>
+                            
                         </StackPanel>
                     </Grid>
                 </ScrollViewer>

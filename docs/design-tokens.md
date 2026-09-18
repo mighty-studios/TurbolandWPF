@@ -106,6 +106,22 @@ between double-line and single-line box glyphs.
 | `Turboland.Brush.ButtonShadow` | Black |
 | `Turboland.Brush.ButtonDisabledFace` | Green |
 
+### Scroll bar
+
+A Borland Vision scroll bar is painted from exactly two colors: a solid base for the
+arrow buttons and the thumb, and a second color dithered into the track as a one-pixel
+checkerboard. The original IDEs picked the pair per window - blue and cyan on the editor
+and debugger - so these are tokens an application is expected to override, at
+application scope or in any narrower resource scope:
+
+| Token | Authentic |
+|---|---|
+| `Turboland.Brush.ScrollTrackBase` | Light Gray |
+| `Turboland.Brush.ScrollTrackStipple` | Black |
+
+The dither tile is a fixed pixel texture: it tiles and clips to the track rather than
+scaling with the metric factor, which is what keeps the VGA look at every scale.
+
 ### Editor
 
 For text-editing surfaces that want the IDE's own colors rather than a dialog field:

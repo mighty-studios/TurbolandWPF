@@ -170,6 +170,22 @@ public sealed class ColorTokens
     public VgaColor ControlShadow => VgaPalette.Black;
 
     /// <summary>
+    /// Solid color of a scroll bar's arrow buttons and thumb, and the ground
+    /// the track dither sits on. VGA 7 (Light Gray). Mirrors
+    /// <c>Turboland.Brush.ScrollTrackBase</c>; an application overrides the
+    /// resource to recolor its bars, the way the original IDEs gave the editor
+    /// and debugger windows their own pairs.
+    /// </summary>
+    public VgaColor ScrollTrackBase => VgaPalette.LightGray;
+
+    /// <summary>
+    /// Checker-dot color of a scroll bar's stippled track, and the ink of its
+    /// arrow glyphs and thumb frame. VGA 0 (Black). Mirrors
+    /// <c>Turboland.Brush.ScrollTrackStipple</c>.
+    /// </summary>
+    public VgaColor ScrollTrackStipple => VgaPalette.Black;
+
+    /// <summary>
     /// Shared selection accent. VGA 2 (Green) - the single highlight color used by
     /// menus, lists and fields alike, so selection looks the same everywhere.
     /// </summary>

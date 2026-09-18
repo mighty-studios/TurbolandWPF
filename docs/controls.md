@@ -26,7 +26,7 @@ as the base of your own, key it off the type:
 | `TreeView`, `TreeViewItem` | Glyph expanders, cell-aligned indentation |
 | `TabControl`, `TabItem` | |
 | `GroupBox` | Header straddles the frame line |
-| `ScrollBar`, `Thumb`, `RepeatButton` | One cell wide / one row tall |
+| `ScrollBar`, `Thumb`, `RepeatButton` | One cell wide / one row tall; two-color track dither, recolorable via `ScrollTrackBase` / `ScrollTrackStipple` |
 | `StatusBar`, `StatusBarItem` | A `Separator` child renders as the CP437 vertical bar |
 | `Window` | Blue desktop or light-gray dialog face - see `ApplyTo` |
 

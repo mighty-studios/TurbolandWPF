@@ -130,6 +130,18 @@
          distinct from ButtonFace so that a scroll bar never reads as pressable. -->
     <SolidColorBrush x:Key="Turboland.Brush.ControlFace" Color="{DynamicResource Turboland.Color.Palette.7}" />
     <SolidColorBrush x:Key="Turboland.Brush.ControlShadow" Color="{DynamicResource Turboland.Color.Palette.0}" />
+
+    <!-- Scroll bar pair. A Borland Vision scroll bar is drawn from exactly two
+         colors: a solid base for the arrow buttons and the thumb, and a second
+         color dithered into the track as a one-pixel checkerboard. The original
+         IDEs picked the pair per window (blue + cyan on the editor and debugger,
+         for instance), so these are tokens in their own right rather than reuse
+         of ControlFace/ControlShadow: an application recolors its bars by
+         overriding these two brushes, at application scope or in any narrower
+         resource scope. The defaults match the gray chrome, so a bar still
+         reads as gray control furniture out of the box. -->
+    <SolidColorBrush x:Key="Turboland.Brush.ScrollTrackBase" Color="{DynamicResource Turboland.Color.Palette.7}" />
+    <SolidColorBrush x:Key="Turboland.Brush.ScrollTrackStipple" Color="{DynamicResource Turboland.Color.Palette.0}" />
     <!-- One selection accent shared by menus, lists and fields, so selection looks
          the same wherever it appears. -->
     <SolidColorBrush x:Key="Turboland.Brush.ControlSelected" Color="{DynamicResource Turboland.Color.Palette.2}" />
