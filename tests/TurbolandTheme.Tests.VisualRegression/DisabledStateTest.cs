@@ -234,8 +234,8 @@ public class DisabledStateTest
                 Assert.Equal(Disabled, ((SolidColorBrush)field.Foreground).Color);
 
                 // A disabled field takes the surface color, so the ring must be drawn
-                // or the field stops looking like a field at all.
-                var ring = (Border)field.Template.FindName("focus", field);
+                // in the dim ink or the field stops looking like a field at all.
+                var ring = (Border)field.Template.FindName("outline", field);
                 Assert.NotEqual(0d, ring.BorderThickness.Left);
                 Assert.Equal(Disabled, ((SolidColorBrush)ring.BorderBrush).Color);
             }

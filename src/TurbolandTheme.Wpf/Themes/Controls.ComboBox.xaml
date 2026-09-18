@@ -95,12 +95,13 @@
                         </ToggleButton>
                         <!-- Outline drawn just outside the layout box: focus must not
                              resize the control, and there is no room inside a one-row
-                             field for chrome. Same device as the text box. -->
+                             field for chrome. Same device as the text box: the ring is
+                             a resting frame that only changes color on focus. -->
                         <Border x:Name="outline"
                                 Grid.ColumnSpan="2"
                                 Margin="{DynamicResource Turboland.Size.FocusRingOffset}"
-                                BorderBrush="{DynamicResource Turboland.Brush.ControlSelected}"
-                                BorderThickness="0"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{DynamicResource Turboland.Size.Border}"
                                 SnapsToDevicePixels="True"/>
                         <Popup x:Name="PART_Popup"
                                AllowsTransparency="False"
@@ -128,14 +129,13 @@
                             <Setter TargetName="ContentSite" Property="Visibility" Value="Hidden"/>
                         </Trigger>
                         <Trigger Property="IsKeyboardFocusWithin" Value="True">
-                            <Setter TargetName="outline" Property="BorderThickness" Value="{DynamicResource Turboland.Size.FocusBorder}"/>
+                            <Setter TargetName="outline" Property="BorderBrush" Value="{DynamicResource Turboland.Brush.ControlSelected}"/>
                         </Trigger>
-                        <!-- A disabled field takes the surface color, so without an
-                             outline it would stop looking like a field at all. -->
+                        <!-- A disabled field takes the surface color, so the frame
+                             dims with it rather than disappearing. -->
                         <Trigger Property="IsEnabled" Value="False">
                             <Setter Property="Foreground" Value="{DynamicResource Turboland.Brush.DisabledForeground}"/>
                             <Setter TargetName="border" Property="Background" Value="{DynamicResource Turboland.Brush.WindowBackground}"/>
-                            <Setter TargetName="outline" Property="BorderThickness" Value="{DynamicResource Turboland.Size.FocusBorder}"/>
                             <Setter TargetName="outline" Property="BorderBrush" Value="{DynamicResource Turboland.Brush.DisabledForeground}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>

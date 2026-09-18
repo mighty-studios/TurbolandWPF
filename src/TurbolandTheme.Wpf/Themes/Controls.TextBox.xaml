@@ -6,11 +6,12 @@
          TEXT BOX
          A field is exactly one cell row tall: a white/cyan bar with the
          glyphs filling it edge to edge. That leaves no room for chrome
-         inside the box, so the outline is a ring drawn just outside it
-         and the field carries none at rest.
+         inside the box, so the outline is a ring drawn just outside it.
 
-         The ring is outside the measure, so focus does not grow the
-         control or reflow whatever sits beside it. Standard editing
+         The ring is always present: a resting frame in the control's
+         own BorderBrush, recolored when the field takes focus. Because
+         it lives outside the measure it neither grows the control on
+         focus nor pushes the glyphs off their row. Standard editing
          behavior is preserved; only the chrome changes.
          ============================================================ -->
     <Style TargetType="TextBox">
@@ -38,23 +39,22 @@
                                       Focusable="False"
                                       Padding="{TemplateBinding Padding}"
                                       VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
-                        <Border x:Name="focus"
+                        <Border x:Name="outline"
                                 Margin="{DynamicResource Turboland.Size.FocusRingOffset}"
-                                BorderBrush="{DynamicResource Turboland.Brush.ControlSelected}"
-                                BorderThickness="0"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{DynamicResource Turboland.Size.Border}"
                                 SnapsToDevicePixels="True"/>
                     </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsKeyboardFocused" Value="True">
-                            <Setter TargetName="focus" Property="BorderThickness" Value="{DynamicResource Turboland.Size.FocusBorder}"/>
+                            <Setter TargetName="outline" Property="BorderBrush" Value="{DynamicResource Turboland.Brush.ControlSelected}"/>
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="False">
                             <Setter Property="Background" Value="{DynamicResource Turboland.Brush.WindowBackground}"/>
                             <Setter Property="Foreground" Value="{DynamicResource Turboland.Brush.DisabledForeground}"/>
-                            <!-- A disabled field takes the surface color, so without an
-                                 outline it would stop looking like a field at all. -->
-                            <Setter TargetName="focus" Property="BorderThickness" Value="{DynamicResource Turboland.Size.FocusBorder}"/>
-                            <Setter TargetName="focus" Property="BorderBrush" Value="{DynamicResource Turboland.Brush.DisabledForeground}"/>
+                            <!-- A disabled field takes the surface color, so the frame
+                                 dims with it rather than disappearing. -->
+                            <Setter TargetName="outline" Property="BorderBrush" Value="{DynamicResource Turboland.Brush.DisabledForeground}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
