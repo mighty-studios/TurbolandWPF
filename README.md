@@ -1,7 +1,7 @@
 # Turboland Theme for WPF
 
 A reusable WPF theme that gives a modern .NET desktop application the look of the
-classic DOS IDEs - VGA palette, box-drawing frames, hard
+classic DOS-era IDEs - VGA palette, box-drawing frames, hard
 shadows, and a strict character grid - without giving up standard Windows behavior.
 
 The theme re-templates stock WPF controls. It does not replace them.
@@ -25,8 +25,7 @@ The theme re-templates stock WPF controls. It does not replace them.
 - **Native window behavior** - the frame is drawn in the client area, but resize,
   maximise, Snap Layouts and the taskbar all still work.
 - **Two dialog shapes** - `TurbolandDialog` floats inside the main window like a real
-  text-mode dialog, and `TurbolandFloatingDialog` is a true owned window whose shadow
-  rides a transparent surface - the one to use over WebView2 or other airspace content.
+  text-mode dialog, and `TurbolandFloatingDialog` is a true owned window with emulated drop shadow.
 - **No hardcoded values** - the theme is driven entirely by named design tokens you
   can read, reuse or override.
 
